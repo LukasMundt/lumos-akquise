@@ -24,5 +24,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "elibyy/tcpdf-laravel": "^10.0"
+    }
 }
