@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('jobs', function (Blueprint $table) {
-        //     $table->bigIncrements('id');
-        //     $table->string('queue')->index();
-        //     $table->longText('payload');
-        //     $table->unsignedTinyInteger('attempts');
-        //     $table->unsignedInteger('reserved_at')->nullable();
-        //     $table->unsignedInteger('available_at');
-        //     $table->unsignedInteger('created_at');
-        // });
+        Schema::create('akquise_akquise', function (Blueprint $table) {
+            $table->foreignUlid('projekt_id')
+                ->constrained('projectci_projekt', 'id')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->boolean('teilung');
+            $table->boolean('abriss');
+            $table->boolean('nicht_gewuenscht');
+            $table->boolean('retour');
+            $table->string('status')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('akquise_akquise');
     }
 };
