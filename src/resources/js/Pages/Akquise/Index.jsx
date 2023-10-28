@@ -6,6 +6,7 @@ import { BarsArrowDownIcon } from "@heroicons/react/24/outline";
 import Pagination from "./partials/Pagination";
 import Card from "@/Components/Card";
 import Index_Search from "./partials/Index_Search";
+import SimplePagination from "./partials/SimplePagination";
 
 export default function Index({}) {
   const { user, auth, projekte } = usePage().props;
@@ -38,10 +39,16 @@ export default function Index({}) {
 
       <div className="py-12">
         <div className="mx-auto sm:px-6 lg:px-8 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            <Index_Search className="flex-none" />
+            <div className="flex justify-end col-span-1 lg:col-span-4">
+              <SimplePagination pagination={projekte} />
+            </div>
+          </div>
           <div className="grid lg:grid-cols-5 gap-4">
             <div>
               {/* <Card className="justify-between"> */}
-              <Index_Search className="flex-none" />
+
               {/* </Card> */}
             </div>
 
@@ -102,11 +109,29 @@ export default function Index({}) {
                 </Table.Head>
                 <Table.Body>
                   {projekte.data.map((projekt) => (
-                    <Table.Row>
+                    <Table.Row
+                      key={projekt.projekt_id}
+                      className={
+                        (projekt.nicht_gewuenscht
+                          ? "odd:bg-red-400 even:bg-red-300 odd:dark:bg-red-950 even:dark:bg-red-800 "
+                          : "") +
+                        (projekt.retour
+                          ? "odd:bg-yellow-400 even:bg-yellow-300 odd:dark:bg-yellow-950 even:dark:bg-yellow-800"
+                          : "")
+                      }
+                    >
                       <Table.Cell>
                         <Checkbox />
                       </Table.Cell>
-                      <Table.Cell><Link href={route('akquise.akquise.show',{projekt: projekt.projekt_id})}>{projekt.strasse}</Link></Table.Cell>
+                      <Table.Cell>
+                        <Link
+                          href={route("akquise.akquise.show", {
+                            projekt: projekt.projekt_id,
+                          })}
+                        >
+                          {projekt.strasse}
+                        </Link>
+                      </Table.Cell>
                       <Table.Cell>{projekt.hausnummer}</Table.Cell>
                       <Table.Cell>{projekt.plz}</Table.Cell>
                       <Table.Cell>{projekt.stadtteil}</Table.Cell>

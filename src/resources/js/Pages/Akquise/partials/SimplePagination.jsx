@@ -10,7 +10,7 @@ import ButtonGroup from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 import React from "react";
 import { useForm } from "@inertiajs/react";
 
-export default function Pagination({ pagination }) {
+export default function SimplePagination({ pagination }) {
   const { get } = useForm();
   console.log(pagination);
 
@@ -30,10 +30,10 @@ export default function Pagination({ pagination }) {
   };
 
   return (
-    <div className="w-full flex justify-center">
+    <div className="">
       {/* <div className="w-16"></div> */}
       <ButtonGroup>
-        <Button
+        {/* <Button
           color="gray"
           disabled={pagination.current_page === 1}
           href={
@@ -47,7 +47,7 @@ export default function Pagination({ pagination }) {
           title="First"
         >
           <ChevronDoubleLeftIcon className="w-5" />
-        </Button>
+        </Button> */}
         <Button
           color="gray"
           disabled={pagination.prev_page_url === null}
@@ -82,21 +82,6 @@ export default function Pagination({ pagination }) {
           title="Next"
         >
           <ChevronRightIcon className="w-5" />
-        </Button>
-        <Button
-          color="gray"
-          disabled={pagination.last_page_url === null}
-          href={
-            pagination.last_page_url === null
-              ? ""
-              : route(route().current(), {
-                  ...params,
-                  page: pagination.last_page,
-                })
-          }
-          title="Last"
-        >
-          <ChevronDoubleRightIcon className="w-5" />
         </Button>
       </ButtonGroup>
       {/* <Select className="order-last">

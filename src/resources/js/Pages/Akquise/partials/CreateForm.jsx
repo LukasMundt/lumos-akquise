@@ -17,18 +17,18 @@ export default function CreateForm({ status, className = "" }) {
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      strasse: response === null ? "" : response.data[1],
-      hausnummer: response === null ? "" : response.data[0],
-      plz: response === null ? "" : response.data[6],
-      stadt: response === null ? "" : response.data[5],
-      stadtteil: response === null ? "" : response.data[2],
+      strasse: response.strasse,
+      hausnummer: response.hausnummer,
+      plz: response.plz,
+      stadt: response.stadt,
+      stadtteil: response.stadtteil,
       teilung: true,
       abriss: true,
       nicht_gewuenscht: false,
       retour: false,
       status: "erfasst",
-      coordinates_lat: response === null ? "" : response.lat,
-      coordinates_lon: response === null ? "" : response.lon,
+      coordinates_lat: response.lat,
+      coordinates_lon: response.lon,
     });
 
   const submit = (e) => {
@@ -41,7 +41,7 @@ export default function CreateForm({ status, className = "" }) {
   return (
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
-        {response === null ? (
+        {response.lat === '' || response.lat === '' ? (
           ""
         ) : (
           <MyMap lat={response.lat} lon={response.lon} />

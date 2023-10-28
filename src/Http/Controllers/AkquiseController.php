@@ -21,7 +21,7 @@ class AkquiseController extends Controller
 {
     public function index(Request $request)
     {
-        (int) $page = !empty($request->page)?(int) $request->page:1;
+        (int) $page = !empty($request->page) ? (int) $request->page : 1;
         (String) $search = $request->search;
 
         return Inertia::render('lukasmundt/akquise::Akquise/Index', [
@@ -44,7 +44,7 @@ class AkquiseController extends Controller
             ->orWhere('projectci_projekt.stadt', 'LIKE', '%' . $search . '%')
             ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
             // other
-            
+
             ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner')
             ->orderBy('projectci_projekt.strasse')
             ->orderBy('projectci_projekt.hausnummer_nummer');
@@ -59,19 +59,11 @@ class AkquiseController extends Controller
     {
         $response = CoordinatesService::getNominatimResponse($request->validated('strasse'), $request->validated('hausnummer'));
 
-        if (
-            $response->successful() &&
-            count($response->json()) == 1 &&
-            Cache::put($response->json()[0]['lat'] . '_' . $response->json()[0]['lon'], [
-                'lat' => $response->json()[0]['lat'],
-                'lon' => $response->json()[0]['lon'],
-                'data' => Str::of($response->json()[0]['display_name'])->explode(', '),
-            ], now()->addDays(2))
-        ) {
+        if (Cache::put($response['lat'] . '_' . $response['lon'], $response, now()->addDays(2))) {
             return redirect(
                 route(
                     'akquise.akquise.create3',
-                    ['key' => $response->json()[0]['lat'] . '_' . $response->json()[0]['lon']]
+                    ['key' => $response['lat'] . '_' . $response['lon']]
                 )
             );
         }
@@ -80,7 +72,17 @@ class AkquiseController extends Controller
     public function thirdCreate(Request $request, string $key = null): Response
     {
         if (empty($key) || !Cache::has($key)) {
-            return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => null]);
+            return Inertia::render('lukasmundt/akquise::Akquise/Create', [
+                'response' => [
+                    'hausnummer' => '',
+                    'strasse' => '',
+                    'plz' => '',
+                    'stadt' => '',
+                    'stadtteil' => '',
+                    'lat' => '',
+                    'lon' => '',
+                ]
+            ]);
         }
         return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => Cache::get($key), 'cacheKey' => $key]);
     }

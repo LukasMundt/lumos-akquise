@@ -13,18 +13,30 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useRef } from "react";
 
 export default function Index_Search({ className = "" }) {
+  // Lädt den Wert aus den properties der Page in die Variable search
   const { search } = usePage().props;
 
-  const { data, setData } = useForm({
-    search: search === null ? "" : search,
+  // lädt die parameter der aktuellen Seite in ein Array
+  let paramsRaw = new URLSearchParams(window.location.search)
+    .toString()
+    .split("&");
+  const params = {};
+  paramsRaw.map((param) => {
+    let split = param.split("=");
+    params[split[0]] = decodeURI(split[1]);
   });
 
-  // const myRefname = useRef < HTMLInputElement > null;
+  const { data, setData } = useForm({
+    search: search === null ? "" : decodeURI(search),
+  });
+
   const keyDown = (e) => {
     if (e.key === "Enter") {
-      router.replace(route(route().current(), { search: data.search }))
+      params['search'] = data.search;
+      router.get(route(route().current()), params);
     }
   };
+  
 
   return (
     <div className={"flex items-center gap-4 " + className}>
