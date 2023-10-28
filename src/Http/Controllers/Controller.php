@@ -38,23 +38,12 @@ class Pdf extends TcpdfFpdi
             // width of a single module in points
             'module_height' => 1 // height of a single module in points
         );
-<<<<<<< HEAD
         // $this->write2DBarcode('lumos.example.de/s/13rteqay31b7o9s3a5pge1e3f5', 'QRCODE,Q', 5, 278, 15, 15, $style);
         $this->writeHTML(View::make(
             'akquise::pdf.serienbrief.footer',
             [
                 'footer' => '',
-=======
-        // $this->write2DBarcode('lumos.fego-bauregie.de/s/13rteqay31b7o9s3a5pge1e3f5', 'QRCODE,Q', 5, 278, 15, 15, $style);
-        $this->writeHTML(View::make(
-            'akquise::pdf.serienbrief.footer',
-            [
-                'footer' => 'Tel. 040.556 20 08-0 | E-Mail: info@fego-bauregie.de | Geschäftsführer: Oliver Goslinowski . Joern Olaf Ridder | 
-                Rechtswirksame Erklärungen können nur durch die Geschäftsführung erfolgen | Amtsgericht Hamburg Abt. B. Nr.: 54500
-                Steuer-Nr.: 54/858/00052 | Hamburger Sparkasse | BIC: HASPDEHHXXX | IBAN: DE26200505501216128528',
->>>>>>> cc7edabef7dc7e5905570435276c7bf307a765e8
-            ]
-        )->render());
+            ])->render());
     }
 }
 class Controller extends LaravelController
@@ -228,11 +217,7 @@ class Controller extends LaravelController
                 $pdf->writeHtml(View::make(
                     'akquise::pdf.serienbrief.adresse',
                     [
-<<<<<<< HEAD
                         'absender' => '',
-=======
-                        'absender' => 'FEGO BAUREGIE GMBH | Ostfalenweg 38 | 22453 Hamburg',
->>>>>>> cc7edabef7dc7e5905570435276c7bf307a765e8
                         'empfaenger' => $adressat[0],
                         'strasseHausnummer' => $adressat[1],
                         'plzStadt' => $adressat[2],
