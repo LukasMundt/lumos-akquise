@@ -6,7 +6,6 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import CreatableSelect from "react-select/creatable";
 import ReactSelect from "@/Components/Inputs/ReactSelect";
-import { FileInput } from "flowbite-react";
 
 export default function FirstCreateForm({ status, className = "" }) {
   const { user } = usePage().props;

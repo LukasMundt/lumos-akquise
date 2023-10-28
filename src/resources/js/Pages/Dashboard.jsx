@@ -4,7 +4,7 @@ import { Head, Link } from "@inertiajs/react";
 import { Card } from "flowbite-react";
 import { ChatBubbleLeftRightIcon, HomeModernIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 
-export default class Index extends React.Component {
+export default class Dashboard extends React.Component {
   render() {
     const { auth, statistics } = this.props;
     console.log(this.props);
@@ -13,11 +13,11 @@ export default class Index extends React.Component {
         user={auth.user}
         header={
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Admin-Dashboard
+            Akquise-Dashboard
           </h2>
         }
       >
-        <Head title="Admin-Dashboard" />
+        <Head title="Akquise-Dashboard" />
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -30,10 +30,8 @@ export default class Index extends React.Component {
                         <HomeModernIcon className="w-6 h-6" />
                       </div>
                     </div>
-                    <div className="self-center">
-                      <b>Adressen gesamt</b>
-                      <br />
-                      {statistics.adressenAnzahl}
+                    <div className="self-center text-lg">
+                      <span className="font-black">{statistics.adressenAnzahl}</span> Projekte in der Akquise
                     </div>
                   </div>
                 </Card>
