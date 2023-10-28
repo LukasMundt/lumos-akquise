@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class StoreAkquiseRequest extends FormRequest
+class UpdateAkquiseRequest extends FormRequest
 {
     public function prepareForValidation(): void
     {

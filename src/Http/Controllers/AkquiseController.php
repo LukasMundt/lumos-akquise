@@ -3,15 +3,10 @@
 namespace Lukasmundt\Akquise\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Elibyy\TCPDF\Facades\TCPDF;
-use Elibyy\TCPDF\FpdiTCPDFHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,47 +15,39 @@ use Lukasmundt\Akquise\Http\Requests\StoreAkquiseRequest;
 use Lukasmundt\Akquise\Models\Akquise;
 use Lukasmundt\Akquise\Http\Requests\FirstCreateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Projekt;
-use setasign\Fpdi\TcpdfFpdi;
-use Spatie\Navigation\Navigation;
-use setasign\Fpdi\Fpdi;
+use Lukasmundt\Akquise\Services\CoordinatesService;
 
-class Pdf extends TcpdfFpdi
-{
-    public function Header()
-    {
-        $this->setY(10);
-        $this->SetFont('helvetica', 'B', 20);
-        // $this->ImageSVG('https://fego-bauregie.de/images/logo.svg',null,null,1000);
-        // Title
-        // $this->Cell(0, 15, '<< TCPDF Example 003 >>', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-    }
-    public function Footer()
-    {
-        $this->setY(-20);
-        $this->writeHTML(View::make(
-            'akquise::pdf.serienbrief.footer',
-            [
-                'footer' => 'Fußzeile',
-            ]
-        )->render());
-    }
-}
 class AkquiseController extends Controller
 {
-    public function dashboard(Request $request): Response
+    public function index(Request $request)
     {
-        return Inertia::render(
-            'lukasmundt/akquise::Index',
-            [
-                'navigation' => app(Navigation::class)->tree(),
-                'statistics' => [
-                    'adressenAnzahl' => 100,
-                    'personenAnzahl' => 1001,
-                    'massnahmenAnzahl' => 102,
-                    'massnahmenAusgefuehrtAnzahl' => 103
-                ]
-            ]
-        );
+        (int) $page = !empty($request->page)?(int) $request->page:1;
+        (String) $search = $request->search;
+
+        return Inertia::render('lukasmundt/akquise::Akquise/Index', [
+            'strasse' => $this->getClause()->select(DB::raw('count(strasse) as strasse_count,strasse'))
+                ->groupBy('strasse')
+                ->get(),
+            'plz' => $this->getClause()->select(DB::raw('count(plz) as plz_count,plz'))->groupBy('plz')->get(),
+            'projekte' => $this->getClause($request->search)->select('projectci_projekt.*', 'akquise_akquise.*')->paginate(15, null, 'page', $page),
+            'search' => $search,
+        ]);
+    }
+
+    public function getClause($search = "")
+    {
+        return DB::table('projectci_projekt')
+            // Suche
+            ->where('projectci_projekt.strasse', 'LIKE', '%' . $search . '%')
+            ->orWhere('projectci_projekt.hausnummer', 'LIKE', '%' . $search . '%')
+            ->orWhere('projectci_projekt.plz', 'LIKE', '%' . $search . '%')
+            ->orWhere('projectci_projekt.stadt', 'LIKE', '%' . $search . '%')
+            ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
+            // other
+            
+            ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner')
+            ->orderBy('projectci_projekt.strasse')
+            ->orderBy('projectci_projekt.hausnummer_nummer');
     }
 
     public function firstCreate(Request $request): Response
@@ -70,16 +57,7 @@ class AkquiseController extends Controller
 
     public function secondCreate(FirstCreateAkquiseRequest $request)
     {
-        // if($request->fails()){
-        //     return Inertia::render('lukasmundt/akquise::Akquise/FirstCreate');
-        // }
-        $response = Http::get('https://nominatim.openstreetmap.org/search.php', [
-            'street' => $request->validated('strasse') . "+" . $request->validated('hausnummer'),
-            'country' => 'de',
-            'format' => 'jsonv2'
-        ]);
-
-
+        $response = CoordinatesService::getNominatimResponse($request->validated('strasse'), $request->validated('hausnummer'));
 
         if (
             $response->successful() &&
@@ -97,7 +75,6 @@ class AkquiseController extends Controller
                 )
             );
         }
-
     }
 
     public function thirdCreate(Request $request, string $key = null): Response
@@ -105,64 +82,7 @@ class AkquiseController extends Controller
         if (empty($key) || !Cache::has($key)) {
             return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => null]);
         }
-        return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => Cache::get($key)]);
-    }
-
-    public function pdf(Request $request)
-    {
-        // $pdf = new Fpdi();
-        // $pdf->setSourceFile("C:/Users/lukas/Downloads/Serienbrief 2023.pdf");
-        // $pdf->AddPage();
-        // $tpl = $pdf->importPage(1);
-        // $pdf->useTemplate($tpl);
-        // $pdf->Output('I');
-
-        $pdf = new Pdf();
-        $pdf->SetTitle('hallo');
-        // $pdf->setHeaderCallback(function ($pdf) {
-        //     // $pdf->SetY();
-        //     // Set font
-        //     $pdf->SetFont('helvetica', 'I', 8);
-        //     // Page number
-        //     $pdf->Cell(0, 0, 'Page ' . $pdf->getAliasNumPage() . '/' . $pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-        // });
-        // $pdf->Header();
-        $pdf->SetMargins(20, 20, 20);
-
-        // $pdf->addFont('')
-        $pdf->setFont('dejavusans');
-        $pdf->setSourceFile(""); // fill in the path to the source file here
-        $pdf->AddPage();
-        $tpl = $pdf->importPage(1);
-        $pdf->useTemplate($tpl);
-        $pdf->setY(41);
-        $pdf->writeHtml(View::make(
-            'akquise::pdf.serienbrief.adresse',
-            [
-                'absender' => 'Absender',
-            ]
-        )->render());
-        // $pdf->AddPage();
-        $pdf->Output();
-        // TCPDF::setHeaderCallback(function ($pdf) {
-        //     // $pdf->SetY();
-        //     // Set font
-        //     $pdf->SetFont('helvetica', 'I', 8);
-        //     // Page number
-        //     $pdf->Cell(0, 0, 'Page ' . $pdf->getAliasNumPage() . '/' . $pdf->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-        // });
-        // // TCPDF::setHeaderMargin(0);
-        // TCPDF::SetMargins(20, 50, 20);
-        // TCPDF::AddPage();
-        // TCPDF::writeHtml(View::make(
-        //     'akquise::greeting',
-        //     [
-        //         'name' => 'James',
-        //         'logoPath' => ''
-        //     ]
-        // )->render());
-        // TCPDF::Output();
-
+        return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => Cache::get($key), 'cacheKey' => $key]);
     }
 
     public function store(StoreAkquiseRequest $request, string $key = null): RedirectResponse
@@ -178,30 +98,25 @@ class AkquiseController extends Controller
         $akquise->projekt()->associate($projekt);
         $akquise->save();
 
-        // $projekt = Projekt::find($projekt->projekt_id);
-
-        
-
         return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
-
-    }
-
-    public function edit(Request $request, Projekt $projekt): Response
-    {
-        return Inertia::render('lukasmundt/akquise::Akquise/Create');
-    }
-
-    public function update(Request $request, Akquise $akquise): Response
-    {
-        return Inertia::render('lukasmundt/akquise::Akquise/Create');
     }
 
     public function show(Request $request, Projekt $projekt): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
-            'strassen' => Projekt::select('strasse')->distinct()->get(),
-            'projekt' => $projekt,
+            'projekt' => $projekt->load(['akquise']),
         ]);
     }
-}
 
+    public function edit(Request $request, Projekt $projekt): Response
+    {
+        return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
+            'projekt' => $projekt->load(['akquise']),
+        ]);
+    }
+
+    public function update(Request $request, Projekt $projekt): Response
+    {
+        return Inertia::render('lukasmundt/akquise::Akquise/Edit');
+    }
+}

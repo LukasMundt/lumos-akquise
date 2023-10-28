@@ -6,45 +6,45 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import CreatableSelect from "react-select/creatable";
 import ReactSelect from "@/Components/Inputs/ReactSelect";
-import { FileInput, Label, Select, ToggleSwitch } from "flowbite-react";
+import { Label, Select } from "flowbite-react";
 
 import Checkbox from "@/Components/Inputs/Checkbox";
 import MyMap from "./MyMap";
 import Card from "@/Components/Card";
 
-export default function CreateForm({ status, className = "" }) {
-  const { response, key} = usePage().props;
+export default function EditForm({ className = "" }) {
+  const { projekt } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      strasse: response === null ? "" : response.data[1],
-      hausnummer: response === null ? "" : response.data[0],
-      plz: response === null ? "" : response.data[6],
-      stadt: response === null ? "" : response.data[5],
-      stadtteil: response === null ? "" : response.data[2],
-      teilung: true,
-      abriss: true,
-      nicht_gewuenscht: false,
-      retour: false,
-      status: "erfasst",
-      coordinates_lat: response === null ? "" : response.lat,
-      coordinates_lon: response === null ? "" : response.lon,
+      strasse: projekt.strasse,
+      hausnummer: projekt.hausnummer,
+      plz: projekt.plz,
+      stadt: projekt.stadt,
+      stadtteil: projekt.stadtteil,
+      teilung: projekt.akquise.teilung,
+      abriss: projekt.akquise.abriss,
+      nicht_gewuenscht: projekt.akquise.nicht_gewuenscht,
+      retour: projekt.akquise.retour,
+      status: projekt.akquise.status,
+      coordinates_lat: projekt.coordinates_lat,
+      coordinates_lon: projekt.coordinates_lon,
     });
 
   const submit = (e) => {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.store", {key: key}));
+    post(route("akquise.akquise.update", { projekt: projekt.id }));
   };
 
   return (
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
-        {response === null ? (
+        {false ? (
           ""
         ) : (
-          <MyMap lat={response.lat} lon={response.lon} />
+          <MyMap lat={data.coordinates_lat} lon={data.coordinates_lon} />
         )}
 
         <Card>
