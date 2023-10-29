@@ -16,8 +16,8 @@ class CoordinatesService
             'plz' => '',
             'stadt' => '',
             'stadtteil' => '',
-            'lat' => '',
-            'lon' => '',
+            'lat' => 0,
+            'lon' => 0,
         ];
         // hier wird die Anfrage an OSM gestellt
         $response = Http::get('https://nominatim.openstreetmap.org/search.php', [
@@ -38,7 +38,7 @@ class CoordinatesService
         } else {
             // es gibt nur einen Treffer
             $secondResponse = Http::get('https://nominatim.openstreetmap.org/details.php', [
-                'place_id' => $response->json()[0]['place_id'],
+                'osms_id' => $response->json()[0]['osm_id'],
                 'adressdetails' => 1,
                 'hierarchy' => 0,
                 'group_hierarchy' => 1,

@@ -16,6 +16,7 @@ import {
   ExclamationCircleIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
+import Show_KartenModal from "./partials/Show_KartenModal";
 
 export default class Show extends React.Component {
   render() {
@@ -104,6 +105,7 @@ export default class Show extends React.Component {
               </div>
               <div>
                 <Show_Karte />
+                <Show_KartenModal lat={projekt.coordinates_lat} lon={projekt.coordinates_lon} />
               </div>
             </div>
           </div>
