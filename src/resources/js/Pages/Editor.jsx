@@ -8,7 +8,6 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { createReactEditorJS } from "react-editor-js";
-import MyEditorComponent from "./partials/MyEditorComponent";
 import { Header } from "@editorjs/header";
 
 export default class Editor extends React.Component {

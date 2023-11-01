@@ -13,7 +13,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Lukasmundt\\Akquise\\Providers\\AkquiseProvider"
+                "Lukasmundt\\Akquise\\Providers\\AkquiseProvider",
+                "Elibyy\\TCPDF\\ServiceProvider"
             ]
         }
     },

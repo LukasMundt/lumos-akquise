@@ -34,7 +34,60 @@ class AkquiseController extends Controller
         ]);
     }
 
-    public function getClause($search = "")
+    public function map(Request $request)
+    {
+        $projekte = $this->getClause($request->search)->select('projectci_projekt.coordinates_lat', 'projectci_projekt.coordinates_lon', 'projectci_projekt.strasse', 'projectci_projekt.hausnummer', 'akquise_akquise.projekt_id', 'akquise_akquise.retour', 'akquise_akquise.nicht_gewuenscht')->get();
+
+        $normalMarkers = [];
+        $retourMarkers = [];
+        $nichtGewuenschtMarkers = [];
+
+        foreach ($projekte as $projekt) {
+            if ($projekt->retour) {
+                $retourMarkers[] = [
+                    'lat' => $projekt->coordinates_lat,
+                    'lon' => $projekt->coordinates_lon,
+                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                ];
+            }
+            else if($projekt->nicht_gewuenscht){
+                $nichtGewuenschtMarkers[] = [
+                    'lat' => $projekt->coordinates_lat,
+                    'lon' => $projekt->coordinates_lon,
+                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                ];
+            }
+            else{
+                $normalMarkers[] = [
+                    'lat' => $projekt->coordinates_lat,
+                    'lon' => $projekt->coordinates_lon,
+                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                ];
+            }
+        }
+        $markers = ['layers' => [
+            [
+                'name' => 'Projekte',
+                'markers' => $normalMarkers,
+            ],
+            [
+                'name' => 'retour-Projekte',
+                'markers' => $retourMarkers,
+                'markerColor' => 'yellow',
+            ],
+            [
+                'name' => 'nicht gewünscht-Projekte',
+                'markers' => $nichtGewuenschtMarkers,
+                'markerColor' => 'red',
+            ],
+        ]];
+        return Inertia::render('lukasmundt/akquise::Akquise/IndexMap', [
+            // 'projekte' => $projekte,
+            'markers' => $markers
+        ]);
+    }
+
+    private function getClause($search = "")
     {
         return DB::table('projectci_projekt')
             // Suche
@@ -119,6 +172,8 @@ class AkquiseController extends Controller
 
     public function update(Request $request, Projekt $projekt): Response
     {
-        return Inertia::render('lukasmundt/akquise::Akquise/Edit');
+        return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
+            'projekt' => $projekt->load(['akquise']),
+        ]);
     }
 }
