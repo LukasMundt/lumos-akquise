@@ -12,7 +12,6 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-
 export default function MyMapMulti({
   center,
   markers = {},
@@ -90,12 +89,14 @@ export default function MyMapMulti({
               <LayersControl.Overlay
                 checked={layer.checked === undefined ? true : layer.checked}
                 name={layer.name != null ? layer.name : "Layer"}
+                key={layer.name != null ? layer.name : "Layer"}
               >
                 <LayerGroup>
                   {layer.markers.map((marker) => {
                     // console.log(marker);
                     return (
                       <Marker
+                        key={marker.lat + marker.lon}
                         position={[marker.lat, marker.lon]}
                         icon={
                           layer.markerColor === "red"
