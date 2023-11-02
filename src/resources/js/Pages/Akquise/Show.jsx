@@ -103,7 +103,7 @@ export default class Show extends React.Component {
                   </Card>
                 </section>
               </div>
-              <div>
+              <div className="space-y-4">
                 <Show_Karte />
                 <Show_KartenModal lat={projekt.coordinates_lat} lon={projekt.coordinates_lon} />
               </div>

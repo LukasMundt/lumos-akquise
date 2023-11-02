@@ -31,7 +31,7 @@ export default class Show_KartenModal extends React.Component {
         //     longLat[1],
         // ]);
         var result = proj4(firstProjection, secondProjection, [lon, lat]);
-        console.log(result);
+        // console.log(result);
 
         return (
             <React.Fragment>

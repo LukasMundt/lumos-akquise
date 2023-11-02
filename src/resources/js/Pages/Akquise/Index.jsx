@@ -2,11 +2,13 @@ import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Table } from "flowbite-react";
 import Checkbox from "@/Components/Inputs/Checkbox";
-import { BarsArrowDownIcon } from "@heroicons/react/24/outline";
+import { BarsArrowDownIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Pagination from "./partials/Pagination";
 import Card from "@/Components/Card";
 import Index_Search from "./partials/Index_Search";
 import SimplePagination from "./partials/SimplePagination";
+import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 
 export default function Index({}) {
   const { user, auth, projekte } = usePage().props;
@@ -41,7 +43,11 @@ export default function Index({}) {
         <div className="mx-auto sm:px-6 lg:px-8 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             <Index_Search className="flex-none" />
-            <div className="flex justify-end col-span-1 lg:col-span-4">
+            <div className="flex justify-between col-span-1 lg:col-span-4">
+              <PrimaryLinkButton href={route('akquise.akquise.create.1')}>
+                <PlusIcon className="w-6 me-2" />
+                Projekt erstellen
+              </PrimaryLinkButton>
               <SimplePagination pagination={projekte} />
             </div>
           </div>

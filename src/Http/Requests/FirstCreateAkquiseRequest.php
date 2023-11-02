@@ -17,7 +17,7 @@ class FirstCreateAkquiseRequest extends FormRequest
     {
         return [
             'strasse' => ['required', 'string', 'max:255'],
-            'hausnummer' => ['required', 'string', 'max:255'],
+            // 'hausnummer' => ['required', 'string', 'max:255'],
         ];
     }
 }

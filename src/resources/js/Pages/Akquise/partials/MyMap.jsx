@@ -13,10 +13,11 @@ import "leaflet/dist/leaflet.css";
 import { MapIcon, MapPinIcon as mappinicon } from "@heroicons/react/24/solid";
 import MyMapMulti from "./MyMapMulti";
 
-export default function MyMap({ lat, lon, popup = false }) {
+export default function MyMap({ lat, lon, popup = false, scrollWheelZoom = true}) {
   return (
     <MyMapMulti
       center={[lat, lon]}
+      scrollWheelZoom={scrollWheelZoom}
       markers={{
         layers: [
           {

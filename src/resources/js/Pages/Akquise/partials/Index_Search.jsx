@@ -20,7 +20,7 @@ export default function Index_Search({ className = "" }) {
   let paramsRaw = new URLSearchParams(window.location.search)
     .toString()
     .split("&");
-  const params = {};
+  var params = {};
   paramsRaw.map((param) => {
     let split = param.split("=");
     params[split[0]] = decodeURI(split[1]);
@@ -32,6 +32,7 @@ export default function Index_Search({ className = "" }) {
 
   const keyDown = (e) => {
     if (e.key === "Enter") {
+      params = {}; // Da bei einer neuen Anfrage zu der ersten Seite gesprungen werden soll werden die anderen Parameter hier nicht übergeben.
       params['search'] = data.search;
       router.get(route(route().current()), params);
     }

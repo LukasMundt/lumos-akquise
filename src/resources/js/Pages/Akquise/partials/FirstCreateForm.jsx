@@ -26,7 +26,7 @@ export default function FirstCreateForm({ status, className = "" }) {
   return (
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1">
           {/* Straße */}
           <div>
             <InputLabel htmlFor="strasse" value="Straße" />
@@ -42,7 +42,7 @@ export default function FirstCreateForm({ status, className = "" }) {
             <InputError className="mt-2" message={errors.strasse} />
           </div>
           {/* Hausnummer */}
-          <div>
+          {/* <div>
             <InputLabel htmlFor="hausnummer" value="Hausnummer" />
 
             <TextInput
@@ -54,7 +54,7 @@ export default function FirstCreateForm({ status, className = "" }) {
             />
 
             <InputError className="mt-2" message={errors.hausnummer} />
-          </div>
+          </div> */}
         </div>
 
         <div className="flex items-center gap-4">

@@ -12,6 +12,7 @@ class StoreAkquiseRequest extends FormRequest
     public function prepareForValidation(): void
     {
         $this->merge([
+            'nicht_gewuenscht' => $this->status=='Nicht gewünscht'?true:$this->nicht_gewuenscht,
             'hausnummer' => Str::lower($this->hausnummer),
             'hausnummer_nummer' => Str::remove(Str::of('a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z')->explode(','), $this->hausnummer),
         ]);

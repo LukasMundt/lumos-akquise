@@ -12,10 +12,12 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use Lukasmundt\Akquise\Http\Requests\StoreAkquiseRequest;
+use Lukasmundt\Akquise\Http\Requests\UpdateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Akquise;
 use Lukasmundt\Akquise\Http\Requests\FirstCreateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Projekt;
 use Lukasmundt\Akquise\Services\CoordinatesService;
+use Spatie\Navigation\Facades\Navigation;
 
 class AkquiseController extends Controller
 {
@@ -160,6 +162,7 @@ class AkquiseController extends Controller
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
             'projekt' => $projekt->load(['akquise']),
+            'navigation' => app(Navigation::class)::tree(),
         ]);
     }
 
@@ -170,10 +173,15 @@ class AkquiseController extends Controller
         ]);
     }
 
-    public function update(Request $request, Projekt $projekt): Response
+    public function update(UpdateAkquiseRequest $request, Projekt $projekt): RedirectResponse
     {
-        return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
-            'projekt' => $projekt->load(['akquise']),
-        ]);
+        $projekt->load('akquise');
+        $projekt->akquise->update($request->validated());
+        // $projekt->update($request->validated());
+
+        // return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
+        //     'projekt' => $projekt->load(['akquise']),
+        // ]);
+        return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
     }
 }

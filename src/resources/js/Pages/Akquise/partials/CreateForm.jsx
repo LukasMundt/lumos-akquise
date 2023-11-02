@@ -13,7 +13,7 @@ import MyMap from "./MyMap";
 import Card from "@/Components/Card";
 
 export default function CreateForm({ status, className = "" }) {
-  const { response, key} = usePage().props;
+  const { response, key } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
@@ -35,16 +35,20 @@ export default function CreateForm({ status, className = "" }) {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.store", {key: key}));
+    post(route("akquise.akquise.store", { key: key }));
   };
 
   return (
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
-        {response.lat === '' || response.lat === '' ? (
+        {response.lat === "" || response.lat === "" ? (
           ""
         ) : (
-          <MyMap lat={response.lat} lon={response.lon} />
+          <MyMap
+            lat={response.lat}
+            lon={response.lon}
+            scrollWheelZoom={false}
+          />
         )}
 
         <Card>
@@ -186,12 +190,14 @@ export default function CreateForm({ status, className = "" }) {
                   setData("status", e.target.value);
                 }}
               >
-                <option value="erfasst">Erfasst</option>
-                <option value="werbemassnahmen">Werbemaßnahmen</option>
-                <option value="nicht_gewuenscht">Nicht Gewünscht</option>
-                <option value="im_verkauf">Im Verkauf</option>
-                <option value="verkauft">Durch uns verkauft</option>
-                <option value="konkurrenz">Durch Konkurrenz behandelt</option>
+                <option value="Erfasst">Erfasst</option>
+                <option value="Werbemassnahmen">Werbemaßnahmen</option>
+                <option value="Nicht Gewünscht">Nicht Gewünscht</option>
+                <option value="Im Verkauf">Im Verkauf</option>
+                <option value="Durch uns verkauft">Durch uns verkauft</option>
+                <option value="Durch Konkurrenz behandelt">
+                  Durch Konkurrenz behandelt
+                </option>
               </Select>
 
               <InputError className="mt-2" message={errors.status} />

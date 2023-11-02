@@ -44,7 +44,7 @@ export default function EditForm({ className = "" }) {
         {false ? (
           ""
         ) : (
-          <MyMap lat={data.coordinates_lat} lon={data.coordinates_lon} />
+          <MyMap lat={data.coordinates_lat} lon={data.coordinates_lon} scrollWheelZoom={false} />
         )}
 
         <Card>
@@ -57,6 +57,7 @@ export default function EditForm({ className = "" }) {
                 className="w-full"
                 id="strasse"
                 value={data.strasse}
+                disabled
                 onChange={(e) => {
                   setData("strasse", e.target.value);
                 }}
@@ -72,6 +73,7 @@ export default function EditForm({ className = "" }) {
                 className="w-full"
                 id="hausnummer"
                 value={data.hausnummer}
+                disabled
                 onChange={(e) => {
                   setData("hausnummer", e.target.value);
                 }}
@@ -86,6 +88,7 @@ export default function EditForm({ className = "" }) {
               <TextInput
                 className="w-full"
                 id="plz"
+                disabled
                 value={data.plz}
                 onChange={(e) => {
                   setData("plz", e.target.value);
@@ -101,6 +104,7 @@ export default function EditForm({ className = "" }) {
               <TextInput
                 className="w-full"
                 id="stadtteil"
+                disabled
                 value={data.stadtteil}
                 onChange={(e) => {
                   setData("stadtteil", e.target.value);
@@ -186,12 +190,12 @@ export default function EditForm({ className = "" }) {
                   setData("status", e.target.value);
                 }}
               >
-                <option value="erfasst">Erfasst</option>
-                <option value="werbemassnahmen">Werbemaßnahmen</option>
-                <option value="nicht_gewuenscht">Nicht Gewünscht</option>
-                <option value="im_verkauf">Im Verkauf</option>
-                <option value="verkauft">Durch uns verkauft</option>
-                <option value="konkurrenz">Durch Konkurrenz behandelt</option>
+                <option value="Erfasst">Erfasst</option>
+                <option value="Werbemassnahmen">Werbemaßnahmen</option>
+                <option value="Nicht Gewünscht">Nicht Gewünscht</option>
+                <option value="Im Verkauf">Im Verkauf</option>
+                <option value="Durch uns verkauft">Durch uns verkauft</option>
+                <option value="Durch Konkurrenz behandelt">Durch Konkurrenz behandelt</option>
               </Select>
 
               <InputError className="mt-2" message={errors.status} />
