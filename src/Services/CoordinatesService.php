@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class CoordinatesService
 {
-    public static function getNominatimResponse($strasse, $hausnummer, $stadt = "", $land = "de", $plz = "")
+    public static function getNominatimResponse($strasse, $stadt = "", $land = "de", $plz = "")
     {
         // hier wird das Array initialiesiert, und alle Werte leer gesetzt. Einige werden später ggf. geändert
         $result = [
@@ -25,6 +25,7 @@ class CoordinatesService
             'country' => $land,
             'format' => 'jsonv2'
         ]);
+        Log::debug($response);
 
 
         if (!$response->successful() || count($response->json()) != 1) {
@@ -37,19 +38,27 @@ class CoordinatesService
             return $result;
         } else {
             // es gibt nur einen Treffer
-            $secondResponse = Http::get('https://nominatim.openstreetmap.org/details.php', [
-                'osms_id' => $response->json()[0]['osm_id'],
-                'adressdetails' => 1,
+            $secondResponse = Http::get('https://nominatim.openstreetmap.org/reverse.php', [
+                'addressdetails' => '1',
+                // 'osmtype' => $response->json()[0]['osm_type'],
+                // 'osmid' => $response->json()[0]['osm_id'],
+                'lat' => $response->json()[0]['lat'],
+                'lon' => $response->json()[0]['lon'],
                 'hierarchy' => 0,
                 'group_hierarchy' => 1,
-                'format' => 'json',
+                'format' => 'jsonv2',
             ]);
-            $result['strasse'] = isset($secondResponse->json()['addresstags']['street']) ? $secondResponse->json()['addresstags']['street'] : "";
-            $result['hausnummer'] = isset($secondResponse->json()['addresstags']['housenumber']) ? $secondResponse->json()['addresstags']['housenumber'] : "";
-            $result['plz'] = isset($secondResponse->json()['addresstags']['postcode']) ? $secondResponse->json()['addresstags']['postcode'] : "";
-            $result['stadt'] = isset($secondResponse->json()['addresstags']['city']) ? $secondResponse->json()['addresstags']['city'] : "";
-            $result['lon'] = isset($secondResponse->json()['geometry']['coordinates'][0]) ? $secondResponse->json()['geometry']['coordinates'][0] : "";
-            $result['lat'] = isset($secondResponse->json()['geometry']['coordinates'][1]) ? $secondResponse->json()['geometry']['coordinates'][1] : "";
+            if(!$secondResponse->successful()){
+                Log::debug($secondResponse->json());
+                return $result;
+            }
+            $result['strasse'] = isset($secondResponse->json()['address']['road']) ? $secondResponse->json()['address']['road'] : "";
+            $result['hausnummer'] = isset($secondResponse->json()['address']['house_number']) ? $secondResponse->json()['address']['house_number'] : "";
+            $result['plz'] = isset($secondResponse->json()['address']['postcode']) ? $secondResponse->json()['address']['postcode'] : "";
+            $result['stadt'] = isset($secondResponse->json()['address']['city']) ? $secondResponse->json()['address']['city'] : "";
+            $result['stadtteil'] = isset($secondResponse->json()['address']['suburb']) ? $secondResponse->json()['address']['suburb'] : "";
+            $result['lon'] = $response->json()[0]['lon'];
+            $result['lat'] = $response->json()[0]['lat'];
             Log::debug($result);
             Log::debug($secondResponse->json());
             return $result;
