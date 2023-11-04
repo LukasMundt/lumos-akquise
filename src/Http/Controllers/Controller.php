@@ -3,12 +3,19 @@
 namespace Lukasmundt\Akquise\Http\Controllers;
 
 use App\Http\Controllers\Controller as LaravelController;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use Lukasmundt\Akquise\Models\Akquise;
+use Lukasmundt\Akquise\Models\Gruppe;
 use Lukasmundt\Akquise\Models\Projekt;
+use Lukasmundt\ProjectCI\Models\Person;
+use Lukasmundt\ProjectCI\Models\Telefonnummer;
 use setasign\Fpdi\TcpdfFpdi;
 use Spatie\Navigation\Navigation;
 
@@ -118,9 +125,7 @@ class Controller extends LaravelController
         //                     'typ' => $value['Beziehung'] == 'Eigentümer' || $value['Eigentümer'] == 'WAHR' ? 'eigentuemer' : ($value['Nachbar'] == 'WAHR' ? "nachbar" : ""),
         //                 ]);
         //             }
-        //             // $akquise->save();
-
-        //             // $akquise->gruppen()->attach($gruppe->id);
+                    
 
         //         }
         //     }

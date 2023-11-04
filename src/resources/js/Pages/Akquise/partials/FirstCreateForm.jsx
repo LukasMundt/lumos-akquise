@@ -29,7 +29,7 @@ export default function FirstCreateForm({ status, className = "" }) {
         <div className="grid grid-cols-1">
           {/* Straße */}
           <div>
-            <InputLabel htmlFor="strasse" value="Straße" />
+            <InputLabel htmlFor="strasse" value="Straße und Hausnummer" />
 
             <TextInput
               id="strasse"

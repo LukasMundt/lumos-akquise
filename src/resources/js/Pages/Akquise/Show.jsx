@@ -17,6 +17,7 @@ import {
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
 import Show_KartenModal from "./partials/Show_KartenModal";
+import Show_Person from "./partials/Show_Personen";
 
 export default class Show extends React.Component {
   render() {
@@ -101,7 +102,9 @@ export default class Show extends React.Component {
                       )}
                     </div>
                   </Card>
+                  
                 </section>
+                <Show_Person gruppen={projekt.akquise.gruppen}/>
               </div>
               <div className="space-y-4">
                 <Show_Karte />

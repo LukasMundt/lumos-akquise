@@ -1,0 +1,74 @@
+import Card from "@/Components/Card";
+import PrimaryButton from "@/Components/PrimaryButton";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+import {
+  ArrowTopRightOnSquareIcon,
+  InformationCircleIcon,
+  UserCircleIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import { Link } from "@inertiajs/react";
+import { Button } from "flowbite-react";
+
+export default function Show_Person({ gruppen = [] }) {
+  return (
+    <section className="mt-12">
+      <div className="flex justify-center mb-4">
+        <div className="p-4 bg-emerald-300 rounded-full" title="Details">
+          <UserIcon className="w-6 h-6" />
+        </div>
+      </div>
+      <Card directClassName="space-y-3">
+        {gruppen.length === 0 ? (
+          <div>Diesem Projekt sind keine Personen zugeordnet.</div>
+        ) : (
+          ""
+        )}
+        {gruppen.map((gruppe, indexG) => {
+          return gruppe.personen.map((person, indexP) => {
+            console.log(person);
+            return (
+              <>
+                <div className="flex space-x-3 justify-between">
+                  <div>
+                    <UserCircleIcon className="w-8" />
+                  </div>
+                  <div className="flex-grow">
+                    <div>
+                      {(person.anrede === null ? "" : person.anrede + " ") +
+                        (person.titel === null ? "" : person.titel + " ") +
+                        (person.vorname === null ? "" : person.vorname + " ") +
+                        (person.nachname === null ? "" : person.nachname)}
+                    </div>
+                    <div>Tel: </div>
+                    {person.email === null ? (
+                      ""
+                    ) : (
+                      <div>
+                        E-Mail:{" "}
+                        <a href={"mailto:" + person.email}>{person.email}</a>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <Button color="gray">
+                      <ArrowTopRightOnSquareIcon className="w-5" />
+                    </Button>
+                  </div>
+                </div>
+                {indexG + 1 === gruppen.length ||
+                indexP + 1 === gruppe.personen ? (
+                  ""
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <hr className="border border-2 dark:border-gray-500 w-1/2 rounded-full" />
+                  </div>
+                )}
+              </>
+            );
+          });
+        })}
+      </Card>
+    </section>
+  );
+}

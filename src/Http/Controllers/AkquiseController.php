@@ -7,7 +7,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -49,40 +48,40 @@ class AkquiseController extends Controller
                 $retourMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
-                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                    'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
                 ];
-            }
-            else if($projekt->nicht_gewuenscht){
+            } else if ($projekt->nicht_gewuenscht) {
                 $nichtGewuenschtMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
-                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                    'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
                 ];
-            }
-            else{
+            } else {
                 $normalMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
-                    'label' => $projekt->strasse.' '.$projekt->hausnummer,
+                    'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
                 ];
             }
         }
-        $markers = ['layers' => [
-            [
-                'name' => 'Projekte',
-                'markers' => $normalMarkers,
-            ],
-            [
-                'name' => 'retour-Projekte',
-                'markers' => $retourMarkers,
-                'markerColor' => 'yellow',
-            ],
-            [
-                'name' => 'nicht gewünscht-Projekte',
-                'markers' => $nichtGewuenschtMarkers,
-                'markerColor' => 'red',
-            ],
-        ]];
+        $markers = [
+            'layers' => [
+                [
+                    'name' => 'Projekte',
+                    'markers' => $normalMarkers,
+                ],
+                [
+                    'name' => 'retour-Projekte',
+                    'markers' => $retourMarkers,
+                    'markerColor' => 'yellow',
+                ],
+                [
+                    'name' => 'nicht gewünscht-Projekte',
+                    'markers' => $nichtGewuenschtMarkers,
+                    'markerColor' => 'red',
+                ],
+            ]
+        ];
         return Inertia::render('lukasmundt/akquise::Akquise/IndexMap', [
             // 'projekte' => $projekte,
             'markers' => $markers
@@ -101,6 +100,7 @@ class AkquiseController extends Controller
             // other
 
             ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner')
+            //->join('projectci_gruppeverknuepfung', 'akquise_akquise.id', '=', 'projectci_gruppeverknuepfung.gruppeverknuepfung_id')
             ->orderBy('projectci_projekt.strasse')
             ->orderBy('projectci_projekt.hausnummer_nummer');
     }
@@ -112,7 +112,7 @@ class AkquiseController extends Controller
 
     public function secondCreate(FirstCreateAkquiseRequest $request)
     {
-        $response = CoordinatesService::getNominatimResponse($request->validated('strasse'), $request->validated('hausnummer'));
+        $response = CoordinatesService::getNominatimResponse($request->validated('strasse'));
 
         if (Cache::put($response['lat'] . '_' . $response['lon'], $response, now()->addDays(2))) {
             return redirect(
@@ -161,7 +161,7 @@ class AkquiseController extends Controller
     public function show(Request $request, Projekt $projekt): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
-            'projekt' => $projekt->load(['akquise']),
+            'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen']),
             'navigation' => app(Navigation::class)::tree(),
         ]);
     }
@@ -177,11 +177,7 @@ class AkquiseController extends Controller
     {
         $projekt->load('akquise');
         $projekt->akquise->update($request->validated());
-        // $projekt->update($request->validated());
 
-        // return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
-        //     'projekt' => $projekt->load(['akquise']),
-        // ]);
         return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
     }
 }
