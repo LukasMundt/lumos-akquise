@@ -1,11 +1,9 @@
 import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import { Link, router, usePage } from "@inertiajs/react";
-import { Button, Select } from "flowbite-react";
+import { router } from "@inertiajs/react";
+import { Button } from "flowbite-react";
 import ButtonGroup from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 import React from "react";
 import { useForm } from "@inertiajs/react";

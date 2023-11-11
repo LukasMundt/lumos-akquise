@@ -1,14 +1,5 @@
-import { Head, Link, useForm, usePage } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Table } from "flowbite-react";
-import Checkbox from "@/Components/Inputs/Checkbox";
-import { BarsArrowDownIcon, PlusIcon } from "@heroicons/react/24/outline";
-import Pagination from "./partials/Pagination";
-import Card from "@/Components/Card";
-import Index_Search from "./partials/Index_Search";
-import SimplePagination from "./partials/SimplePagination";
-import PrimaryButton from "@/Components/PrimaryButton";
-import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 import MyMapMulti from "./partials/MyMapMulti";
 
 export default function IndexMap({}) {

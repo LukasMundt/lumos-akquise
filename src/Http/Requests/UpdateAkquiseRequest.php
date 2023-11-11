@@ -2,10 +2,7 @@
 
 namespace Lukasmundt\Akquise\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class UpdateAkquiseRequest extends FormRequest
 {

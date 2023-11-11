@@ -1,9 +1,6 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
-import { Card } from "flowbite-react";
-import { ChatBubbleLeftRightIcon, HomeModernIcon, UserGroupIcon } from "@heroicons/react/24/outline";
-import CreateForm from "./partials/CreateForm";
+import { Head } from "@inertiajs/react";
 import FirstCreateForm from "./partials/FirstCreateForm";
 
 export default class Create extends React.Component {

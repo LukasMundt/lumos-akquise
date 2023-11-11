@@ -6,13 +6,10 @@ import Card from "@/Components/Card";
 import {
   InformationCircleIcon,
   MapPinIcon,
-  MinusIcon,
 } from "@heroicons/react/24/outline";
-import { Progress } from "flowbite-react";
 import Show_Status from "./partials/Show_Status";
 import {
   CheckCircleIcon,
-  CheckIcon,
   ExclamationCircleIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
@@ -104,7 +101,7 @@ export default class Show extends React.Component {
                   </Card>
                   
                 </section>
-                <Show_Person gruppen={projekt.akquise.gruppen}/>
+                <Show_Person gruppen={projekt.akquise.gruppen} projektId={projekt.id}/>
               </div>
               <div className="space-y-4">
                 <Show_Karte />

@@ -4,8 +4,6 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/Inputs/TextInput";
 import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
-import CreatableSelect from "react-select/creatable";
-import ReactSelect from "@/Components/Inputs/ReactSelect";
 import { Label, Select } from "flowbite-react";
 
 import Checkbox from "@/Components/Inputs/Checkbox";

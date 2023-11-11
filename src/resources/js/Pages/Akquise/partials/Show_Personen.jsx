@@ -3,21 +3,30 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 import {
   ArrowTopRightOnSquareIcon,
-  InformationCircleIcon,
+  LinkIcon,
   UserCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "@inertiajs/react";
 import { Button } from "flowbite-react";
 
-export default function Show_Person({ gruppen = [] }) {
+export default function Show_Person({ gruppen = [], projektId }) {
   return (
-    <section className="mt-12">
-      <div className="flex justify-center mb-4">
+    <section className="mt-12 space-y-4">
+      <div className="flex justify-center">
         <div className="p-4 bg-emerald-300 rounded-full" title="Details">
           <UserIcon className="w-6 h-6" />
         </div>
       </div>
+      <div className="flex justify-center">
+        <PrimaryLinkButton
+          href={route("akquise.akquise.personen.associate", {
+            projekt: projektId,
+          })}
+        >
+          <LinkIcon className="w-4 mr-3"/> Person verknüpfen
+        </PrimaryLinkButton>
+      </div>
+
       <Card directClassName="space-y-3">
         {gruppen.length === 0 ? (
           <div>Diesem Projekt sind keine Personen zugeordnet.</div>
@@ -29,7 +38,7 @@ export default function Show_Person({ gruppen = [] }) {
             console.log(person);
             return (
               <>
-                <div className="flex space-x-3 justify-between">
+                <div className="flex space-x-3 justify-between" key={person.id}>
                   <div>
                     <UserCircleIcon className="w-8" />
                   </div>
@@ -51,7 +60,10 @@ export default function Show_Person({ gruppen = [] }) {
                     )}
                   </div>
                   <div>
-                    <Button color="gray">
+                    <Button
+                      color="gray"
+                      href={route("akquise.person.show", { person: person.id })}
+                    >
                       <ArrowTopRightOnSquareIcon className="w-5" />
                     </Button>
                   </div>
