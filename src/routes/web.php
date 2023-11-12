@@ -4,13 +4,13 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Lukasmundt\Akquise\Http\Controllers\AkquiseController;
 use Lukasmundt\Akquise\Http\Controllers\Controller;
+use Lukasmundt\Akquise\Http\Controllers\PersonController;
 
 
 Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(function () {
     Route::get('', [Controller::class, 'dashboard'])->name('akquise.dashboard');
 
     Route::middleware([])->prefix("akquise")->group(function () {
-
         Route::get('', [AkquiseController::class, 'index'])->name('akquise.akquise.index');
         Route::get('/map',[AkquiseController::class, 'map'])->name('akquise.akquise.map');
         Route::get('/create/1', [AkquiseController::class, 'firstCreate'])->name('akquise.akquise.create.1');
@@ -21,6 +21,10 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(functio
         Route::get('/{projekt}/edit', [AkquiseController::class, 'edit'])->name('akquise.akquise.edit');
         Route::post('/{projekt}', [AkquiseController::class, 'update'])->name('akquise.akquise.update');
         Route::get('/{projekt}', [AkquiseController::class, 'show'])->name('akquise.akquise.show');
+
+        // Routen fuer Personen
+        Route::get('/{projekt}/personen/associate', [PersonController::class, 'associate'])->name('akquise.akquise.personen.associate');
+        Route::post('/{projekt}/personen/associate', [PersonController::class, 'storeAssociation'])->name('akquise.akquise.personen.storeAssociation');
     });
 });
 Route::get('/pdf', [Controller::class, 'pdf'])->name('akquise.akquise.pdf');

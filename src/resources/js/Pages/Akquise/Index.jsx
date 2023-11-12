@@ -3,10 +3,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Table } from "flowbite-react";
 import Checkbox from "@/Components/Inputs/Checkbox";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import Pagination from "./partials/Pagination";
 import Index_Search from "./partials/Index_Search";
 import SimplePagination from "./partials/SimplePagination";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+import Pagination from "@/Components/Pagination";
 
 export default function Index({}) {
   const { user, auth, projekte } = usePage().props;
@@ -42,7 +42,7 @@ export default function Index({}) {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
             <Index_Search className="flex-none" />
             <div className="flex justify-between col-span-1 lg:col-span-4">
-              <PrimaryLinkButton href={route('akquise.akquise.create.1')}>
+              <PrimaryLinkButton href={route("akquise.akquise.create.1")}>
                 <PlusIcon className="w-6 me-2" />
                 Projekt erstellen
               </PrimaryLinkButton>
@@ -150,7 +150,10 @@ export default function Index({}) {
             </div>
           </div>
 
-          <Pagination pagination={projekte} />
+          <Pagination
+            current_page={projekte.current_page}
+            last_page={projekte.last_page}
+          />
         </div>
       </div>
     </AuthenticatedLayout>

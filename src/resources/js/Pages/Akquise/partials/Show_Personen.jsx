@@ -62,7 +62,7 @@ export default function Show_Person({ gruppen = [], projektId }) {
                   <div>
                     <Button
                       color="gray"
-                      href={route("akquise.person.show", { person: person.id })}
+                      href={route("projectci.person.show", { person: person.id })}
                     >
                       <ArrowTopRightOnSquareIcon className="w-5" />
                     </Button>
