@@ -14,7 +14,10 @@ import {
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
 import Show_KartenModal from "./partials/Show_KartenModal";
-import Show_Person from "./partials/Show_Personen";
+import Drawer from "@/Components/Drawer";
+import Form from "../Notiz/Form";
+import Show_Notizen from "../Notiz/Show_Notizen";
+import Show_Personen from "./partials/Show_Personen";
 
 export default class Show extends React.Component {
   render() {
@@ -33,6 +36,9 @@ export default class Show extends React.Component {
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <Drawer>
+              <Form related_type="Lukasmundt\Akquise\Models\Akquise" related_id={projekt.akquise.id} />
+            </Drawer>
             <Show_Status status={projekt.akquise.status} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -101,7 +107,8 @@ export default class Show extends React.Component {
                   </Card>
                   
                 </section>
-                <Show_Person gruppen={projekt.akquise.gruppen} projektId={projekt.id}/>
+                <Show_Personen gruppen={projekt.akquise.gruppen} projektId={projekt.id}/>
+                <Show_Notizen notizen={projekt.akquise.notizen}/>
               </div>
               <div className="space-y-4">
                 <Show_Karte />

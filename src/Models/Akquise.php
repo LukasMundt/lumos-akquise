@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Lukasmundt\ProjectCI\Models\Gruppe;
+use Lukasmundt\ProjectCI\Models\Notiz;
 
 // use Lukasmundt\ProjectCI\Models\Projekt as P;
 
@@ -47,5 +48,10 @@ class Akquise extends Model
     public function gruppen(): MorphToMany
     {
         return $this->morphToMany(Gruppe::class, 'gruppeverknuepfung', 'projectci_gruppeverknuepfung')->withPivot('typ','prioritaet');
+    }
+
+    public function notizen(): MorphMany
+    {
+        return $this->morphMany(Notiz::class, 'notierbar');
     }
 }

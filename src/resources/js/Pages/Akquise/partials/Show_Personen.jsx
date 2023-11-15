@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "flowbite-react";
 
-export default function Show_Person({ gruppen = [], projektId }) {
+export default function Show_Personen({ gruppen = [], projektId }) {
   return (
     <section className="mt-12 space-y-4">
       <div className="flex justify-center">

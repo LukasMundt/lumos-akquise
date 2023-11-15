@@ -161,8 +161,7 @@ class AkquiseController extends Controller
     public function show(Request $request, Projekt $projekt): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
-            'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen']),
-            'navigation' => app(Navigation::class)::tree(),
+            'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen', 'akquise.notizen']),
         ]);
     }
 
