@@ -1,52 +1,67 @@
 import Card from "@/Components/Card";
-import { Delimiter } from "@editorjs/delimiter";
-import { Header } from "@editorjs/header";
-import { Marker } from "@editorjs/marker";
-import { NestedList } from "@editorjs/nested-list";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { createReactEditorJS } from "react-editor-js";
+// import Header from "@editorjs/header";
+import EditorJS from "@editorjs/editorjs";
+// import { Delimiter } from "@editorjs/delimiter";
+// import {Header} from "@editorjs/header";
+// import { Marker } from "@editorjs/marker";
+// import { NestedList } from "@editorjs/nested-list";
+import {
+  ArrowTopRightOnSquareIcon,
+  ArrowUpOnSquareIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
+import { Link, usePage } from "@inertiajs/react";
+import { Button } from "flowbite-react";
+import { createReactEditorJS } from "react-editor-js/dist/react-editor-js.cjs";
 
-export default function Notiz({ notiz, className }) {
+export default function Notiz({ notiz, className, link = null }) {
   const ReactEditorJS = createReactEditorJS();
+  const { projekt } = usePage().props;
 
-  console.log(notiz);
-  const data = JSON.parse(notiz.inhalt);
-  console.log(data);
+  // console.log(notiz);
+  const data = notiz.inhalt;
+  const defaultValue = JSON.parse(data);
+  // console.log(data);
 
   return (
     <div className={"" + className} key={notiz.id}>
-      <Card className="dark:bg-gray-700 bg-gray-200 link:text-purple-600">
-        {notiz.blocks.map((block) => {
-          if (block.type === "header") {
-            switch (block.data.level) {
-              case 1:
-                return (
-                  <div>
-                    <h1
-                      dangerouslySetInnerHTML={{ __html: block.data.text }}
-                    ></h1>
-                  </div>
-                );
+      <Card className="dark:bg-gray-700 bg-gray-200 link:text-purple-600 relative">
+        <div className="absolute z-50 right-0 pr-4">
+          <div className="relative">
+            <Button
+              color="gray"
+              size="sm"
+              href={route("akquise.akquise.showMitNotiz", {
+                projekt: projekt.id,
+                notiz: notiz.id,
+              })}
+              title="Notiz bearbeiten"
+            >
+              <>
+                <ArrowTopRightOnSquareIcon className="w-6" />
+              </>
+            </Button>
+          </div>
+        </div>
 
-              default:
-                console.log("point reached");
-                return (
-                  <div>
-                    <h2
-                      dangerouslySetInnerHTML={{ __html: block.data.text }}
-                    ></h2>
-                  </div>
-                );
+        <ReactEditorJS
+          // onInitialize={handleInitialize}
+          narrow={false}
+          minHeight={0}
+          readOnly
+          defaultValue={defaultValue}
+          tools={
+            {
+              // header: Header,
+              // delimiter: Delimiter,
+              // marker: Marker,
+              // nestedList: NestedList,
             }
-          } else {
-            return (
-              <div>
-                <p dangerouslySetInnerHTML={{ __html: block.data.text }}></p>
-              </div>
-            );
           }
-          return <div dangerouslySetInnerHTML={{ __html: result }}></div>;
-        })}
+          holder={"custom" + notiz.id}
+        >
+          <div id={"custom" + notiz.id} className="p-0"></div>
+        </ReactEditorJS>
       </Card>
     </div>
   );

@@ -3,7 +3,7 @@ import Notiz from "./partials/Notiz";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Card from "@/Components/Card";
 
-export default function Show_Notizen({ notizen }) {
+export default function Show_Notizen({ notizen, button}) {
   return (
     <section className="mt-12 space-y-4">
       <div className="flex justify-center">
@@ -18,7 +18,7 @@ export default function Show_Notizen({ notizen }) {
       })}
     >
       <LinkIcon className="w-4 mr-3"/> Person verknüpfen
-    </PrimaryLinkButton> */}
+    </PrimaryLinkButton> */}{button}
       </div>
 
       <Card directClassName="space-y-3">

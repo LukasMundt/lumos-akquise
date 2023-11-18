@@ -1,8 +1,8 @@
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
-import { createReactEditorJS } from "react-editor-js";
-import Header from "@editorjs/header";
+import { createReactEditorJS } from "react-editor-js/dist/react-editor-js.cjs";
+// import Header from "@editorjs/header";
 import Delimiter from "@editorjs/delimiter";
 import Marker from "@editorjs/marker";
 import NestedList from "@editorjs/nested-list";
@@ -15,18 +15,17 @@ export default function Form({
   className = "",
   related_type,
   related_id,
-  id,
+  id = null,
+  defaultValue = "",
 }) {
-  const { notiz } = usePage().props;
-
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      id: "",
-      notiz: "",
+      id: id,
+      notiz: defaultValue != null ? JSON.parse(defaultValue) : null,
       related_type: related_type ?? "",
       related_id: related_id ?? "",
     });
-
+  console.log(data.notiz);
   const editorCore = React.useRef(null);
 
   const handleInitialize = React.useCallback((instance) => {
@@ -42,8 +41,6 @@ export default function Form({
   }, []);
 
   const ReactEditorJS = createReactEditorJS();
-
-  
 
   const submit = async function (e) {
     e.preventDefault();
@@ -81,19 +78,12 @@ export default function Form({
         </div>
 
         <ReactEditorJS
-          onInitialize={handleInitialize}
-          defaultValue={[
-                {
-                    "id": "Ijwz6A8hBE",
-                    "type": "paragraph",
-                    "data": {
-                        "text": "Notiz mit Inhalt"
-                    }
-                }
-            ]}
+          
+          // onInitialize={handleInitialize}
+          defaultValue={data.notiz}
           tools={{
-            header: Header,
-            // delimiter: Delimiter,
+            // header: Header,
+            delimiter: Delimiter,
             // marker: Marker,
             // nestedList: NestedList,
           }}

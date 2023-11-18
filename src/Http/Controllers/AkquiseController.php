@@ -16,6 +16,7 @@ use Lukasmundt\Akquise\Models\Akquise;
 use Lukasmundt\Akquise\Http\Requests\FirstCreateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Projekt;
 use Lukasmundt\Akquise\Services\CoordinatesService;
+use Lukasmundt\ProjectCI\Models\Notiz;
 use Spatie\Navigation\Facades\Navigation;
 
 class AkquiseController extends Controller
@@ -158,10 +159,11 @@ class AkquiseController extends Controller
         return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
     }
 
-    public function show(Request $request, Projekt $projekt): Response
+    public function show(Request $request, Projekt $projekt, Notiz $notiz = null): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
             'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen', 'akquise.notizen']),
+            'notiz' => $notiz,
         ]);
     }
 

@@ -19,8 +19,10 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(functio
         Route::get('/create/3/{key}', [AkquiseController::class, 'thirdCreate'])->name('akquise.akquise.create3');
         Route::post('', [AkquiseController::class, 'store'])->name('akquise.akquise.store');
         Route::get('/{projekt}/edit', [AkquiseController::class, 'edit'])->name('akquise.akquise.edit');
+        
         Route::post('/{projekt}', [AkquiseController::class, 'update'])->name('akquise.akquise.update');
         Route::get('/{projekt}', [AkquiseController::class, 'show'])->name('akquise.akquise.show');
+        Route::get('/{projekt}/notiz/{notiz}', [AkquiseController::class, 'show'])->name('akquise.akquise.showMitNotiz');
 
         // Routen fuer Personen
         Route::get('/{projekt}/personen/associate', [PersonController::class, 'associate'])->name('akquise.akquise.personen.associate');

@@ -3,10 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import Show_Karte from "./partials/Show_Karte";
 import Card from "@/Components/Card";
-import {
-  InformationCircleIcon,
-  MapPinIcon,
-} from "@heroicons/react/24/outline";
+import { InformationCircleIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Show_Status from "./partials/Show_Status";
 import {
   CheckCircleIcon,
@@ -21,7 +18,7 @@ import Show_Personen from "./partials/Show_Personen";
 
 export default class Show extends React.Component {
   render() {
-    const { auth, projekt } = this.props;
+    const { auth, projekt, notiz } = this.props;
     console.log(this.props);
     return (
       <AuthenticatedLayout
@@ -36,9 +33,6 @@ export default class Show extends React.Component {
 
         <div className="py-12">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <Drawer>
-              <Form related_type="Lukasmundt\Akquise\Models\Akquise" related_id={projekt.akquise.id} />
-            </Drawer>
             <Show_Status status={projekt.akquise.status} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -105,14 +99,31 @@ export default class Show extends React.Component {
                       )}
                     </div>
                   </Card>
-                  
                 </section>
-                <Show_Personen gruppen={projekt.akquise.gruppen} projektId={projekt.id}/>
-                <Show_Notizen notizen={projekt.akquise.notizen}/>
+                <Show_Personen
+                  gruppen={projekt.akquise.gruppen}
+                  projektId={projekt.id}
+                />
+                <Show_Notizen
+                  notizen={projekt.akquise.notizen}
+                  button={
+                    <Drawer showDrawer={notiz != null} buttonText={"Neue Notiz"}>
+                      <Form
+                        related_type="Lukasmundt\Akquise\Models\Akquise"
+                        related_id={projekt.akquise.id}
+                        defaultValue={notiz != null ? notiz.inhalt : null}
+                        id={notiz != null ? notiz.id : null}
+                      />
+                    </Drawer>
+                  }
+                />
               </div>
               <div className="space-y-4">
                 <Show_Karte />
-                <Show_KartenModal lat={projekt.coordinates_lat} lon={projekt.coordinates_lon} />
+                <Show_KartenModal
+                  lat={projekt.coordinates_lat}
+                  lon={projekt.coordinates_lon}
+                />
               </div>
             </div>
           </div>
