@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Lukasmundt\ProjectCI\Models\Gruppe;
+use Lukasmundt\ProjectCI\Models\Kampagne;
 use Lukasmundt\ProjectCI\Models\Notiz;
 
 // use Lukasmundt\ProjectCI\Models\Projekt as P;
@@ -53,5 +54,10 @@ class Akquise extends Model
     public function notizen(): MorphMany
     {
         return $this->morphMany(Notiz::class, 'notierbar');
+    }
+
+    public function kampagnen(): MorphToMany
+    {
+        return $this->morphToMany(Kampagne::class, 'bewerbbar');
     }
 }

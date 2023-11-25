@@ -3,6 +3,7 @@
 namespace Lukasmundt\Akquise\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,6 @@ use Lukasmundt\Akquise\Http\Requests\FirstCreateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Projekt;
 use Lukasmundt\Akquise\Services\CoordinatesService;
 use Lukasmundt\ProjectCI\Models\Notiz;
-use Spatie\Navigation\Facades\Navigation;
 
 class AkquiseController extends Controller
 {
@@ -25,14 +25,55 @@ class AkquiseController extends Controller
     {
         (int) $page = !empty($request->page) ? (int) $request->page : 1;
         (String) $search = $request->search;
+        (string) $filter = $request->filter;
+
+        $filterVals = [];
+        if ($filter != "") {
+            $expl = explode(";", urldecode($filter));
+            $filterVals = array();
+            foreach ($expl as $value) {
+                $filterVals[explode(':', $value)[0]] = explode(',', explode(':', $value)[1]);
+            }
+        }
+
+        $projekte = Projekt::where(function (Builder $query) use ($filterVals) {
+            $query->whereIn('strasse', $filterVals['strasse'] ?? [], 'and', !isset($filterVals['strasse']) || count($filterVals['strasse']) == 0)
+                ->whereIn('hausnummer', $filterVals['hausnummer'] ?? [], 'and', !isset($filterVals['hausnummer']) || count($filterVals['hausnummer']) == 0)
+                ->whereIn('stadtteil', $filterVals['stadtteil'] ?? [], 'and', !isset($filterVals['stadtteil']) || count($filterVals['stadtteil']) == 0)
+                ->whereIn('plz', $filterVals['plz'] ?? [], 'and', !isset($filterVals['plz']) || count($filterVals['plz']) == 0);
+        })->where(function (Builder $query) use ($search) {
+            $query->where('strasse', 'LIKE', '%' . $search . '%')
+                ->orWhere('hausnummer', 'LIKE', '%' . $search . '%')
+                ->orWhere('plz', 'LIKE', '%' . $search . '%')
+                ->orWhere('stadt', 'LIKE', '%' . $search . '%');
+            // ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
+
+        })
+            ->orderBy('strasse')
+            ->orderBy('hausnummer_nummer')
+            ->get('*')
+            ->load('akquise');
+
+
+        // ->orWhere('projectci_projekt.plz', 'LIKE', '%' . $search . '%')
+        // ->orWhere('projectci_projekt.stadt', 'LIKE', '%' . $search . '%')
+        // ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
+
+
+        // $projekte = $projekte->toQue
+
+
 
         return Inertia::render('lukasmundt/akquise::Akquise/Index', [
             'strasse' => $this->getClause()->select(DB::raw('count(strasse) as strasse_count,strasse'))
                 ->groupBy('strasse')
                 ->get(),
             'plz' => $this->getClause()->select(DB::raw('count(plz) as plz_count,plz'))->groupBy('plz')->get(),
-            'projekte' => $this->getClause($request->search)->select('projectci_projekt.*', 'akquise_akquise.*')->paginate(15, null, 'page', $page),
+            // 'projekte' => $this->getClause($request->search)->select('projectci_projekt.*', 'akquise_akquise.*')->paginate(15, null, 'page', $page),
+            'projekte' => $projekte->toQuery()->paginate(),
             'search' => $search,
+            'filter' => $filter,
+            'test' => $projekte->toQuery()->paginate(),
         ]);
     }
 
@@ -159,11 +200,11 @@ class AkquiseController extends Controller
         return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
     }
 
-    public function show(Request $request, Projekt $projekt, Notiz $notiz = null): Response
+    public function show(Request $request, Projekt $projekt): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
             'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen', 'akquise.notizen']),
-            'notiz' => $notiz,
+            // 'notiz' => $notiz,
         ]);
     }
 

@@ -20,7 +20,7 @@ class StoreAssociationRequest extends FormRequest
             'nachname.__isNew__' => 'sometimes|boolean',
             'nachname.label' => 'required|string|max:255',
             'nachname.value' => [new StorePersonAssociation],
-            'typ.value' => ['required|string|max:255', Rule::in(['Nachbar', 'Eigentümer', 'Sonstiges'])]
+            'typ.value' => ['required', 'string', 'max:255', Rule::in(['Nachbar', 'Eigentümer', 'Sonstiges'])]
         ];
     }
 }

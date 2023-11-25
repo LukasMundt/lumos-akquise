@@ -28,7 +28,7 @@ export default function Show_Notizen({ notizen, button}) {
           ""
         )}
         {notizen.map((notiz) => (
-          <Notiz notiz={notiz} />
+          <Notiz notiz={notiz} key={notiz.id} />
         ))}
       </Card>
     </section>

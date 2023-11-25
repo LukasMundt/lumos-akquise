@@ -56,13 +56,7 @@ export default function Form({
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
         <div className="flex justify-end gap-4 pt-4">
-          <PrimaryButton disabled={processing}>Speichern</PrimaryButton>
-
-          <Button size="sm" onClick={handleClear} color="failure">
-            Leeren
-          </Button>
-
-          <Transition
+        <Transition
             show={recentlySuccessful}
             enterFrom="opacity-0"
             leaveTo="opacity-0"
@@ -70,6 +64,13 @@ export default function Form({
           >
             <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
           </Transition>
+          <PrimaryButton disabled={processing}>Speichern</PrimaryButton>
+
+          <Button size="sm" onClick={handleClear} color="failure">
+            Leeren
+          </Button>
+
+          
         </div>
 
         <div>
@@ -79,7 +80,7 @@ export default function Form({
 
         <ReactEditorJS
           
-          // onInitialize={handleInitialize}
+          onInitialize={handleInitialize}
           defaultValue={data.notiz}
           tools={{
             // header: Header,

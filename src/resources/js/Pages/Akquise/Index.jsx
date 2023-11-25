@@ -114,7 +114,7 @@ export default function Index({}) {
                 <Table.Body>
                   {projekte.data.map((projekt) => (
                     <Table.Row
-                      key={projekt.projekt_id}
+                      key={projekt.id}
                       className={
                         (projekt.nicht_gewuenscht
                           ? "odd:bg-red-400 even:bg-red-300 odd:dark:bg-red-950 even:dark:bg-red-800 "
@@ -130,7 +130,7 @@ export default function Index({}) {
                       <Table.Cell>
                         <Link
                           href={route("akquise.akquise.show", {
-                            projekt: projekt.projekt_id,
+                            projekt: projekt.id,
                           })}
                         >
                           {projekt.strasse}

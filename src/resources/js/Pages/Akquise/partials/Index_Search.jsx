@@ -4,7 +4,8 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export default function Index_Search({ className = "" }) {
   // Lädt den Wert aus den properties der Page in die Variable search
-  const { search } = usePage().props;
+  const { search, filter } = usePage().props;
+  console.log(filter);
 
   // lädt die parameter der aktuellen Seite in ein Array
   let paramsRaw = new URLSearchParams(window.location.search)
@@ -23,11 +24,11 @@ export default function Index_Search({ className = "" }) {
   const keyDown = (e) => {
     if (e.key === "Enter") {
       params = {}; // Da bei einer neuen Anfrage zu der ersten Seite gesprungen werden soll werden die anderen Parameter hier nicht übergeben.
-      params['search'] = data.search;
+      params["search"] = data.search;
+      params["filter"] = filter;
       router.get(route(route().current()), params);
     }
   };
-  
 
   return (
     <div className={"flex items-center gap-4 " + className}>
