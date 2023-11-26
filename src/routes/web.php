@@ -11,12 +11,15 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(functio
     Route::get('', [Controller::class, 'dashboard'])->name('akquise.dashboard');
 
     Route::middleware([])->prefix("akquise")->group(function () {
+        // Karte
+        Route::get('/map',[AkquiseController::class, 'map'])->name('akquise.akquise.map');
+        
         Route::get('/{projekt}/notiz/{notiz}', [AkquiseController::class, 'show'])->name('akquise.akquise.showMitNotiz');
         Route::get('/{projekt}', [AkquiseController::class, 'show'])->name('akquise.akquise.show');
         Route::post('/{projekt}', [AkquiseController::class, 'update'])->name('akquise.akquise.update');
         
+        
         Route::get('', [AkquiseController::class, 'index'])->name('akquise.akquise.index');
-        Route::get('/map',[AkquiseController::class, 'map'])->name('akquise.akquise.map');
         Route::get('/create/1', [AkquiseController::class, 'firstCreate'])->name('akquise.akquise.create.1');
         Route::post('/create/2', [AkquiseController::class, 'secondCreate'])->name('akquise.akquise.create2');
         Route::get('/create/3', [AkquiseController::class, 'thirdCreate'])->name('akquise.akquise.create3');

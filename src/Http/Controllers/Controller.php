@@ -16,46 +16,12 @@ use Lukasmundt\Akquise\Models\Gruppe;
 use Lukasmundt\Akquise\Models\Projekt;
 use Lukasmundt\ProjectCI\Models\Person;
 use Lukasmundt\ProjectCI\Models\Telefonnummer;
-use setasign\Fpdi\TcpdfFpdi;
 use Spatie\Navigation\Navigation;
 
-class Pdf extends TcpdfFpdi
-{
-    public function Header()
-    {
-        $this->setY(10);
-        $this->setFont('dejavusans');
-        // $this->ImageSVG('https://fego-bauregie.de/images/logo.svg',null,null,1000);
-        $this->image('C:\Users\lukas\Downloads\Logo.png', 125, 10, 0, 20);
-        // Title
-        // $this->Cell(0, 15, '<< TCPDF Example 003 >>', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-    }
-    public function Footer()
-    {
-        $this->setY(-20);
-        $this->SetFont('dejavusans');
-        $style = array(
-            'border' => 0,
-            'vpadding' => 'auto',
-            'hpadding' => 'auto',
-            'fgcolor' => array(0, 0, 0),
-            'bgcolor' => false,
-            //array(255,255,255)
-            'module_width' => 1,
-            // width of a single module in points
-            'module_height' => 1 // height of a single module in points
-        );
-        // $this->write2DBarcode('lumos.example.de/s/13rteqay31b7o9s3a5pge1e3f5', 'QRCODE,Q', 5, 278, 15, 15, $style);
-        $this->writeHTML(View::make(
-            'akquise::pdf.serienbrief.footer',
-            [
-                'footer' => '',
-            ])->render());
-    }
-}
+
 class Controller extends LaravelController
 {
-    public function dashboard(Request $request): Response
+    public function dashboard(Request $request)
     {
         // $json = file_get_contents('C:\Users\lukas\Downloads\fego.json');
         // $json = json_decode($json, true);
@@ -131,19 +97,19 @@ class Controller extends LaravelController
         //     }
 
         // }
-        return Inertia::render(
-            'lukasmundt/akquise::Dashboard',
-            [
-                'navigation' => app(Navigation::class)->tree(),
-                'statistics' => [
-                    'adressenAnzahl' => Projekt::has('akquise')->count(),
-                    'personenAnzahl' => 1001,
-                    'massnahmenAnzahl' => 102,
-                    'massnahmenAusgefuehrtAnzahl' => 103,
+        return redirect('');
+        // return Inertia::render(
+        //     'lukasmundt/akquise::Dashboard',
+        //     [
+        //         'navigation' => app(Navigation::class)->tree(),
+        //         'statistics' => [
+        //             'adressenAnzahl' => Projekt::has('akquise')->count(),
+        //             'personenAnzahl' => 1001,
+        //             'massnahmenAusgefuehrtAnzahl' => 103,
 
-                ],
-            ]
-        );
+        //         ],
+        //     ]
+        // );
     }
 
     

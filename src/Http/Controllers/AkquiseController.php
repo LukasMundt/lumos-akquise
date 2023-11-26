@@ -49,8 +49,8 @@ class AkquiseController extends Controller
             // ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
 
         })
-            ->orderBy('strasse')
-            ->orderBy('hausnummer_nummer')
+            // ->orderBy('strasse')
+            // ->orderBy('hausnummer_nummer')
             ->get('*')
             ->load('akquise');
 
@@ -203,7 +203,7 @@ class AkquiseController extends Controller
     public function show(Request $request, Projekt $projekt): Response
     {
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
-            'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen', 'akquise.notizen']),
+            'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen.telefonnummern', 'akquise.notizen']),
             // 'notiz' => $notiz,
         ]);
     }

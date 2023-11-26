@@ -23,7 +23,7 @@ export default function Show_Personen({ gruppen = [], projektId }) {
             projekt: projektId,
           })}
         >
-          <LinkIcon className="w-4 mr-3"/> Person verknüpfen
+          <LinkIcon className="w-4 mr-3" /> Person verknüpfen
         </PrimaryLinkButton>
       </div>
 
@@ -49,7 +49,21 @@ export default function Show_Personen({ gruppen = [], projektId }) {
                         (person.vorname === null ? "" : person.vorname + " ") +
                         (person.nachname === null ? "" : person.nachname)}
                     </div>
-                    <div>Tel: </div>
+                    {person.telefonnummern === null ? (
+                      ""
+                    ) : (
+                      <div>
+                        Tel:{" "}
+                        {person.telefonnummern.map((nummer, index) => (
+                          <>
+                            <a href={"tel:"+nummer.telefonnummer} key={nummer.id}>{nummer.telefonnummer}</a>
+                            {index + 1 === person.telefonnummern.length
+                              ? ""
+                              : ", "}
+                          </>
+                        ))}
+                      </div>
+                    )}
                     {person.email === null ? (
                       ""
                     ) : (
@@ -62,7 +76,9 @@ export default function Show_Personen({ gruppen = [], projektId }) {
                   <div>
                     <Button
                       color="gray"
-                      href={route("projectci.person.show", { person: person.id })}
+                      href={route("projectci.person.show", {
+                        person: person.id,
+                      })}
                     >
                       <ArrowTopRightOnSquareIcon className="w-5" />
                     </Button>

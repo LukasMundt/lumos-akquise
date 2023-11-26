@@ -2,7 +2,12 @@ import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Card } from "flowbite-react";
-import { ChatBubbleLeftRightIcon, HomeModernIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftRightIcon,
+  HomeModernIcon,
+  MegaphoneIcon,
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
 
 export default class Dashboard extends React.Component {
   render() {
@@ -31,7 +36,10 @@ export default class Dashboard extends React.Component {
                       </div>
                     </div>
                     <div className="self-center text-lg">
-                      <span className="font-black">{statistics.adressenAnzahl}</span> Projekte in der Akquise
+                      <span className="font-black">
+                        {statistics.adressenAnzahl}
+                      </span>{" "}
+                      Projekte in der Akquise
                     </div>
                   </div>
                 </Card>
@@ -53,31 +61,16 @@ export default class Dashboard extends React.Component {
                   <div className="flex flex-row content-center">
                     <div className="mr-3 self-center">
                       <div className="p-4 bg-emerald-300 rounded-full text-gray-600">
-                        <ChatBubbleLeftRightIcon className="w-6 h-6" />
+                        <MegaphoneIcon className="w-6 h-6" />
                       </div>
                     </div>
                     <div className="self-center">
-                      <b>Maßnahmen gesamt</b>
-                      <br />
-                      {statistics.massnahmenAnzahl}
+                      {statistics.KampagnenAnzahl}
+                      Kampagnen
                     </div>
                   </div>
                 </Card>
                 <div></div>
-                <Card>
-                  <div className="flex flex-row content-center">
-                    <div className="mr-3 self-center">
-                      <div className="p-4 bg-emerald-300 rounded-full text-gray-600">
-                        <ChatBubbleLeftRightIcon className="w-6 h-6" />
-                      </div>
-                    </div>
-                    <div className="self-center">
-                      <b>Maßnahmen durchgeführt</b>
-                      <br />
-                      {statistics.massnahmenAusgefuehrtAnzahl}
-                    </div>
-                  </div>
-                </Card>
               </div>
             </div>
           </div>
