@@ -141,10 +141,10 @@ class AkquiseController extends Controller
             ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
             // other
 
-            ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner')
+            ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner');
             //->join('projectci_gruppeverknuepfung', 'akquise_akquise.id', '=', 'projectci_gruppeverknuepfung.gruppeverknuepfung_id')
-            ->orderBy('projectci_projekt.strasse')
-            ->orderBy('projectci_projekt.hausnummer_nummer');
+            // ->orderBy('projectci_projekt.strasse')
+            // ->orderBy('projectci_projekt.hausnummer_nummer');
     }
 
     public function firstCreate(Request $request): Response

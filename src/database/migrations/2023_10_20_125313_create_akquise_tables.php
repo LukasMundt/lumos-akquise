@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('nicht_gewuenscht');
             $table->boolean('retour');
             $table->string('status')->nullable();
+            $table->integer('zustand')->nullable();
             $table->timestamps();
         });
     }
