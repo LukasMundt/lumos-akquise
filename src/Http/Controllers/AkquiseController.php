@@ -61,19 +61,25 @@ class AkquiseController extends Controller
 
 
         // $projekte = $projekte->toQue
-
-
+// == []?"true":"false"
+        $projekteEmpty = json_decode(json_encode($projekte), 1) == [];
 
         return Inertia::render('lukasmundt/akquise::Akquise/Index', [
-            'strasse' => $this->getClause()->select(DB::raw('count(strasse) as strasse_count,strasse'))
-                ->groupBy('strasse')
-                ->get(),
-            'plz' => $this->getClause()->select(DB::raw('count(plz) as plz_count,plz'))->groupBy('plz')->get(),
+            // 'strasse' => $this->getClause()->select(DB::raw('count(strasse) as strasse_count,strasse'))
+            //     ->groupBy('strasse')
+            //     ->get(),
+            // 'plz' => $this->getClause()->select(DB::raw('count(plz) as count,plz'))->groupBy('plz')->get(),
             // 'projekte' => $this->getClause($request->search)->select('projectci_projekt.*', 'akquise_akquise.*')->paginate(15, null, 'page', $page),
-            'projekte' => $projekte->toQuery()->paginate(),
+            'projekte' => $projekteEmpty ? [] : $projekte->toQuery()->paginate(),
             'search' => $search,
-            'filter' => $filter,
-            'test' => $projekte->toQuery()->paginate(),
+            'filter' => $filterVals,
+            'filterCols' => [
+                'Stadtteil' => $projekteEmpty ? [] : Projekt::all()->toQuery()->select(DB::raw('count(stadtteil) as count,stadtteil as value'))->groupBy('stadtteil')->get(),
+                'PLZ' => $projekteEmpty ? [] : Projekt::all()->toQuery()->select(DB::raw('count(plz) as count,plz as value'))->groupBy('plz')->get(),
+                'Strasse' => $projekteEmpty ? [] : Projekt::all()->toQuery()->select(DB::raw('count(strasse) as count,strasse as value'))->groupBy('strasse')->get(),
+                // 'Retoure' => $projekte->toQuery()->select(DB::raw('count(akquise.retour) as count,akquise.retour'))->groupBy('akquise.retour')->get(),
+            ],
+            // 'test' => $projekte->toQuery()->paginate(),
         ]);
     }
 
@@ -142,9 +148,9 @@ class AkquiseController extends Controller
             // other
 
             ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner');
-            //->join('projectci_gruppeverknuepfung', 'akquise_akquise.id', '=', 'projectci_gruppeverknuepfung.gruppeverknuepfung_id')
-            // ->orderBy('projectci_projekt.strasse')
-            // ->orderBy('projectci_projekt.hausnummer_nummer');
+        //->join('projectci_gruppeverknuepfung', 'akquise_akquise.id', '=', 'projectci_gruppeverknuepfung.gruppeverknuepfung_id')
+        // ->orderBy('projectci_projekt.strasse')
+        // ->orderBy('projectci_projekt.hausnummer_nummer');
     }
 
     public function firstCreate(Request $request): Response

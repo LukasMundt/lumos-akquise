@@ -7,9 +7,11 @@ import Index_Search from "./partials/Index_Search";
 import SimplePagination from "./partials/SimplePagination";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 import Pagination from "@/Components/Pagination";
+import Index_Filter from "./partials/Index_Filter";
 
 export default function Index({}) {
   const { user, auth, projekte } = usePage().props;
+  console.log(projekte.length);
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
@@ -40,23 +42,19 @@ export default function Index({}) {
       <div className="py-12">
         <div className="mx-auto sm:px-6 lg:px-8 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-            <Index_Search className="flex-none" />
-            <div className="flex justify-between col-span-1 lg:col-span-4">
-              <PrimaryLinkButton href={route("akquise.akquise.create.1")}>
-                <PlusIcon className="w-6 me-2" />
-                Projekt erstellen
-              </PrimaryLinkButton>
-              <SimplePagination pagination={projekte} />
-            </div>
-          </div>
-          <div className="grid lg:grid-cols-5 gap-4">
-            <div>
-              {/* <Card className="justify-between"> */}
-
-              {/* </Card> */}
+            <div className="row-span-2 space-y-4">
+              <Index_Search className="flex-none" />
+              <Index_Filter />
             </div>
 
-            <div className="col-span-4">
+            <div className="lg:col-span-4">
+              <div className="flex justify-between col-span-1 lg:col-span-4 mb-4">
+                <PrimaryLinkButton href={route("akquise.akquise.create.1")}>
+                  <PlusIcon className="w-6 me-2" />
+                  Projekt erstellen
+                </PrimaryLinkButton>
+                <SimplePagination pagination={projekte} />
+              </div>
               <Table striped>
                 <Table.Head>
                   <Table.HeadCell>#</Table.HeadCell>
@@ -112,39 +110,45 @@ export default function Index({}) {
                   </Table.HeadCell>
                 </Table.Head>
                 <Table.Body>
-                  {projekte.data.map((projekt) => (
-                    <Table.Row
-                      key={projekt.id}
-                      className={
-                        (projekt.nicht_gewuenscht
-                          ? "odd:bg-red-400 even:bg-red-300 odd:dark:bg-red-950 even:dark:bg-red-800 "
-                          : "") +
-                        (projekt.retour
-                          ? "odd:bg-yellow-400 even:bg-yellow-300 odd:dark:bg-yellow-950 even:dark:bg-yellow-800"
-                          : "")
-                      }
-                    >
-                      <Table.Cell>
-                        <Checkbox />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Link
-                          href={route("akquise.akquise.show", {
-                            projekt: projekt.id,
-                          })}
-                        >
-                          {projekt.strasse}
-                        </Link>
-                      </Table.Cell>
-                      <Table.Cell>{projekt.hausnummer}</Table.Cell>
-                      <Table.Cell>{projekt.plz}</Table.Cell>
-                      <Table.Cell>{projekt.stadtteil}</Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell>{projekt.status}</Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell></Table.Cell>
+                  {projekte.length == 0 ? (
+                    <Table.Row>
+                      <Table.Cell colSpan={9} className="text-center">Keine Ergebnisse gefunden.</Table.Cell>
                     </Table.Row>
-                  ))}
+                  ) : (
+                    projekte.data.map((projekt) => (
+                      <Table.Row
+                        key={projekt.id}
+                        className={
+                          (projekt.nicht_gewuenscht
+                            ? "odd:bg-red-400 even:bg-red-300 odd:dark:bg-red-950 even:dark:bg-red-800 "
+                            : "") +
+                          (projekt.retour
+                            ? "odd:bg-yellow-400 even:bg-yellow-300 odd:dark:bg-yellow-950 even:dark:bg-yellow-800"
+                            : "")
+                        }
+                      >
+                        <Table.Cell>
+                          <Checkbox />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Link
+                            href={route("akquise.akquise.show", {
+                              projekt: projekt.id,
+                            })}
+                          >
+                            {projekt.strasse}
+                          </Link>
+                        </Table.Cell>
+                        <Table.Cell>{projekt.hausnummer}</Table.Cell>
+                        <Table.Cell>{projekt.plz}</Table.Cell>
+                        <Table.Cell>{projekt.stadtteil}</Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell>{projekt.status}</Table.Cell>
+                        <Table.Cell></Table.Cell>
+                        <Table.Cell></Table.Cell>
+                      </Table.Row>
+                    ))
+                  )}
                 </Table.Body>
               </Table>
             </div>
