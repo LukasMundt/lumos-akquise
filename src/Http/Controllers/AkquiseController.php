@@ -97,18 +97,21 @@ class AkquiseController extends Controller
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
                 ];
             } else if ($projekt->nicht_gewuenscht) {
                 $nichtGewuenschtMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
                 ];
             } else {
                 $normalMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
                 ];
             }
         }
