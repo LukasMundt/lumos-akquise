@@ -25,7 +25,23 @@ export default function Index_Search({ className = "" }) {
     if (e.key === "Enter") {
       params = {}; // Da bei einer neuen Anfrage zu der ersten Seite gesprungen werden soll werden die anderen Parameter hier nicht übergeben.
       params["search"] = data.search;
-      params["filter"] = filter;
+
+      var filterStr = "";
+      Object.values(filter).map((currentFilter, index) => {
+        if (filterStr == "") {
+          filterStr =
+            Object.keys(filter)[index] + ":" + currentFilter.toString();
+        } else {
+          filterStr =
+            filterStr +
+            ";" +
+            Object.keys(filter)[index] +
+            ":" +
+            currentFilter.toString();
+        }
+      });
+      params["filter"] = decodeURI(filterStr);
+
       router.get(route(route().current()), params);
     }
   };
