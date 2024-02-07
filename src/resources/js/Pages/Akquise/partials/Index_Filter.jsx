@@ -1,13 +1,13 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { router, usePage } from "@inertiajs/react";
-import { Accordion, Button, Checkbox, Label } from "flowbite-react";
-import ButtonGroup from "flowbite-react/lib/esm/components/Button/ButtonGroup";
+import { Accordion, Checkbox, Label } from "flowbite-react";
 import React from "react";
-import { useForm } from "@inertiajs/react";
-import Card from "@/Components/Card";
 // import Checkbox from "@/Components/Inputs/Checkbox";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useState } from "react";
+import DangerButton from "@/Components/DangerButton";
 
 export default function Index_Filter({}) {
   const { filterCols, filter } = usePage().props;
@@ -52,7 +52,6 @@ export default function Index_Filter({}) {
       // Filter für diesen Key ist nicht gesetzt
       var current = [];
       current.push(e.target.id);
-      console.log("Ich bin in diesem fall");
     } else {
       // Filter für diesen Key sind bereits vorhanden
       var current = filters[e.target.dataset.key.toLowerCase() + ""];
@@ -62,24 +61,30 @@ export default function Index_Filter({}) {
         current = current
           .slice(0, current.indexOf(e.target.id + ""))
           .concat(current.slice(current.indexOf(e.target.id + "") + 1));
-        console.log("entfernen");
-        console.log(current);
       } else if (e.target.checked) {
         // füge current hinzu
         current.push(e.target.id + "");
       }
     }
 
-    // current.pop(value);
-    // console.log(e.target.dataset.key);
-    // console.log(Object.keys(filters).includes(e.target.dataset.key.toLowerCase()));
-
     const allFilters = filters;
     allFilters[e.target.dataset.key.toLowerCase() + ""] = current;
     setFilters(allFilters);
-    // setFilters(allFilters);
-    console.log(filters);
+
     forceUpdate();
+  };
+
+  const handleDiesenFilterEntfernen = (e) => {
+    const key = e.target.dataset.key.toLowerCase();
+
+    if (Object.keys(filters).includes(key)) {
+      var allFilters = filters;
+      allFilters = delete allFilters[key];
+
+      setFilters(allFilters);
+
+      forceUpdate();
+    }
   };
 
   return (
@@ -92,13 +97,18 @@ export default function Index_Filter({}) {
                   {Object.keys(filterCols)[index]}
                 </Accordion.Title>
                 <Accordion.Content className="default-text-color">
-                  <PrimaryButton
-                    as="button"
-                    type="button"
-                    onClick={handleClick}
-                  >
-                    Filter anwenden
-                  </PrimaryButton>
+                  <div className="flex space-x-3">
+                    <PrimaryButton onClick={handleClick}>
+                      Filter anwenden
+                    </PrimaryButton>
+                    <DangerButton
+                      data-key={Object.keys(filterCols)[index]}
+                      title="Filter entfernen"
+                      onClick={handleDiesenFilterEntfernen}
+                    >
+                      <XMarkIcon className="w-4" />
+                    </DangerButton>
+                  </div>
                   {filterCol.map((filterVal, i) => {
                     return (
                       <div key={i}>

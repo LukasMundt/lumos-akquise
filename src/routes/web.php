@@ -7,7 +7,7 @@ use Lukasmundt\Akquise\Http\Controllers\Controller;
 use Lukasmundt\Akquise\Http\Controllers\PersonController;
 
 
-Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(function () {
+Route::middleware(['web', 'auth', 'verified'])->prefix("/{domain}/akquise")->group(function () {
     Route::get('', [Controller::class, 'dashboard'])->name('akquise.dashboard');
 
     Route::middleware([])->prefix("akquise")->group(function () {
@@ -33,4 +33,4 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("akquise")->group(functio
         Route::post('/{projekt}/personen/associate', [PersonController::class, 'storeAssociation'])->name('akquise.akquise.personen.storeAssociation');
     });
 });
-Route::get('/pdf', [Controller::class, 'pdf'])->name('akquise.akquise.pdf');
+// Route::get('/pdf', [Controller::class, 'pdf'])->name('akquise.akquise.pdf');

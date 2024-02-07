@@ -21,6 +21,11 @@ use Lukasmundt\ProjectCI\Models\Notiz;
 
 class AkquiseController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Akquise::class, 'akquise');
+    }
+
     public function index(Request $request)
     {
         (int) $page = !empty($request->page) ? (int) $request->page : 1;
@@ -85,6 +90,8 @@ class AkquiseController extends Controller
 
     public function map(Request $request)
     {
+        $this->authorize('index');
+
         $projekte = $this->getClause($request->search)->select('projectci_projekt.coordinates_lat', 'projectci_projekt.coordinates_lon', 'projectci_projekt.strasse', 'projectci_projekt.hausnummer', 'akquise_akquise.projekt_id', 'akquise_akquise.retour', 'akquise_akquise.nicht_gewuenscht')->get();
 
         $normalMarkers = [];
@@ -158,11 +165,15 @@ class AkquiseController extends Controller
 
     public function firstCreate(Request $request): Response
     {
+        $this->authorize('create');
+
         return Inertia::render('lukasmundt/akquise::Akquise/FirstCreate');
     }
 
     public function secondCreate(FirstCreateAkquiseRequest $request)
     {
+        $this->authorize('create');
+
         $response = CoordinatesService::getNominatimResponse($request->validated('strasse'));
 
         if (Cache::put($response['lat'] . '_' . $response['lon'], $response, now()->addDays(2))) {
@@ -177,6 +188,8 @@ class AkquiseController extends Controller
 
     public function thirdCreate(Request $request, string $key = null): Response
     {
+        $this->authorize('create');
+
         if (empty($key) || !Cache::has($key)) {
             return Inertia::render('lukasmundt/akquise::Akquise/Create', [
                 'response' => [
@@ -195,6 +208,8 @@ class AkquiseController extends Controller
 
     public function store(StoreAkquiseRequest $request, string $key = null): RedirectResponse
     {
+        $this->authorize('create');
+
         if (!empty($key)) {
             Cache::forget($key);
         }
@@ -211,6 +226,8 @@ class AkquiseController extends Controller
 
     public function show(Request $request, Projekt $projekt): Response
     {
+        $this->authorize('create', $projekt);
+
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
             'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen.telefonnummern', 'akquise.notizen']),
             // 'notiz' => $notiz,
@@ -219,6 +236,8 @@ class AkquiseController extends Controller
 
     public function edit(Request $request, Projekt $projekt): Response
     {
+        $this->authorize('update', $projekt);
+
         return Inertia::render('lukasmundt/akquise::Akquise/Edit', [
             'projekt' => $projekt->load(['akquise']),
         ]);
@@ -226,6 +245,8 @@ class AkquiseController extends Controller
 
     public function update(UpdateAkquiseRequest $request, Projekt $projekt): RedirectResponse
     {
+        $this->authorize('update', $projekt);
+        
         $projekt->load('akquise');
         $projekt->akquise->update($request->validated());
 

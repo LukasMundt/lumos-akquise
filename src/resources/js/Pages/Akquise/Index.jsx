@@ -10,7 +10,7 @@ import Pagination from "@/Components/Pagination";
 import Index_Filter from "./partials/Index_Filter";
 
 export default function Index({}) {
-  const { user, auth, projekte } = usePage().props;
+  const { user, auth, projekte, domain } = usePage().props;
   console.log(projekte.length);
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
@@ -23,7 +23,7 @@ export default function Index({}) {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.create2"));
+    post(route("akquise.akquise.create2", { domain: domain }));
   };
 
   console.log(usePage().props);
@@ -49,11 +49,13 @@ export default function Index({}) {
 
             <div className="lg:col-span-4">
               <div className="flex justify-between col-span-1 lg:col-span-4 mb-4">
-                <PrimaryLinkButton href={route("akquise.akquise.create.1")}>
+                <PrimaryLinkButton
+                  href={route("akquise.akquise.create.1", { domain: domain })}
+                >
                   <PlusIcon className="w-6 me-2" />
                   Projekt erstellen
                 </PrimaryLinkButton>
-                <SimplePagination pagination={projekte} />
+                {/* <SimplePagination pagination={projekte}/> */}
               </div>
               <Table striped>
                 <Table.Head>
@@ -112,7 +114,9 @@ export default function Index({}) {
                 <Table.Body>
                   {projekte.length == 0 ? (
                     <Table.Row>
-                      <Table.Cell colSpan={9} className="text-center">Keine Ergebnisse gefunden.</Table.Cell>
+                      <Table.Cell colSpan={9} className="text-center">
+                        Keine Ergebnisse gefunden.
+                      </Table.Cell>
                     </Table.Row>
                   ) : (
                     projekte.data.map((projekt) => (
@@ -157,6 +161,7 @@ export default function Index({}) {
           <Pagination
             current_page={projekte.current_page}
             last_page={projekte.last_page}
+            params={{ domain: domain }}
           />
         </div>
       </div>

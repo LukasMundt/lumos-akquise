@@ -2,13 +2,17 @@
 
 namespace Lukasmundt\Akquise\Providers;
 
-use App\Services\NavigationService;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Inertia\Inertia;
+use Lukasmundt\Akquise\Models\Akquise;
+use Lukasmundt\Akquise\Policies\AkquisePolicy;
 
 class AkquiseProvider extends ServiceProvider
 {
+    protected $policies = [
+        // Akquise::class => AkquisePolicy::class,
+    ];
+
     /**
      * Bootstrap services.
      *
@@ -19,11 +23,5 @@ class AkquiseProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'akquise');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
-        // $this->app->booted(function () {
-        //     NavigationService::$navigation
-        //     ->add('Akquise', route('akquise.akquise.index'));
-        // });
-        
     }
 }
