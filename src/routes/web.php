@@ -5,12 +5,16 @@ use Illuminate\Support\Facades\Route;
 use Lukasmundt\Akquise\Http\Controllers\AkquiseController;
 use Lukasmundt\Akquise\Http\Controllers\Controller;
 use Lukasmundt\Akquise\Http\Controllers\PersonController;
+use Lukasmundt\Akquise\Http\Controllers\ToolController;
 
 
 Route::middleware(['web', 'auth', 'verified'])->prefix("/{domain}/akquise")->group(function () {
     Route::get('', [Controller::class, 'dashboard'])->name('akquise.dashboard');
 
-    Route::middleware([])->prefix("akquise")->group(function () {
+    Route::get('/tools/fixbauantrag2link', [ToolController::class, 'fixBauantrag2LinkView'])->name('akquise.tools.fixBauantrag2LinkView');
+    Route::post('/tools/fixbauantrag2link', [ToolController::class, 'fixBauantrag2Link'])->name('akquise.tools.fixBauantrag2Link');
+
+    Route::middleware([])->prefix("projects")->group(function () {
         // Karte
         Route::get('/map',[AkquiseController::class, 'map'])->name('akquise.akquise.map');
         
