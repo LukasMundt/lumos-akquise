@@ -1,7 +1,6 @@
 {
     "name": "lukasmundt/akquise",
     "type": "lumos-module",
-    "license": "MIT",
     "autoload": {
         "psr-4": {
             "App\\": "app/",

@@ -49,11 +49,10 @@ class ComposerStaticInitd43032c539d2d0982d88b7a827ab715d
         'D' => 
         array (
             'Doctrine\\Inflector\\' => 19,
-            'Database\\Seeders\\' => 17,
-            'Database\\Factories\\' => 19,
         ),
         'C' => 
         array (
+            'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
         'A' => 
@@ -118,13 +117,9 @@ class ComposerStaticInitd43032c539d2d0982d88b7a827ab715d
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
         ),
-        'Database\\Seeders\\' => 
+        'Carbon\\Doctrine\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/database/seeders',
-        ),
-        'Database\\Factories\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/database/factories',
+            0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
         ),
         'Carbon\\' => 
         array (
