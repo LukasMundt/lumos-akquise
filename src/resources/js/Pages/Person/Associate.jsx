@@ -6,8 +6,7 @@ import Card from "@/Components/Card";
 
 export default class Associate extends React.Component {
   render() {
-    const { auth, projektStr } = this.props;
-    console.log(this.props);
+    const { auth, projektStr, domain } = this.props;
     return (
       <AuthenticatedLayout
         user={auth.user}
@@ -27,7 +26,7 @@ export default class Associate extends React.Component {
               {projektStr}
             </Card>
             <Card>
-              <AssociateForm />
+              <AssociateForm domain={domain} />
             </Card>
           </div>
         </div>

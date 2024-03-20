@@ -19,7 +19,7 @@ use Lukasmundt\ProjectCI\Models\Person;
 
 class PersonController extends Controller
 {
-    public function associate(Request $request, Projekt $projekt)
+    public function associate(Request $request, $domain, Projekt $projekt)
     {
         $akquiseId = $projekt->akquise->id;
         $gruppenRaw = Gruppe::all()->load('akquise');

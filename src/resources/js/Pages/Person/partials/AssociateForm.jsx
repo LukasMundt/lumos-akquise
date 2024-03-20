@@ -6,7 +6,7 @@ import { Transition } from "@headlessui/react";
 import ReactCreatableSelect from "@/Components/Inputs/ReactCreatableSelect";
 import ReactSelect from "@/Components/Inputs/ReactSelect";
 
-export default function AssociateForm({ status, className = "" }) {
+export default function AssociateForm({ status, className = "", domain}) {
   const { user, personen, projekt } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
@@ -20,7 +20,7 @@ export default function AssociateForm({ status, className = "" }) {
     console.log(data);
 
     post(
-      route("akquise.akquise.personen.storeAssociation", { projekt: projekt })
+      route("akquise.akquise.personen.storeAssociation", { projekt: projekt, domain: domain})
     );
   };
 
