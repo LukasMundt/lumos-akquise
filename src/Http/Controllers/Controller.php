@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller as LaravelController;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -23,7 +24,7 @@ class Controller extends LaravelController
 {
     public function dashboard(Request $request)
     {
-        // $json = file_get_contents('C:\Users\lukas\Downloads\fego.json');
+        // $json = file_get_contents('C:\Users\lukas\Downloads\20231217_fego.json');
         // $json = json_decode($json, true);
 
 

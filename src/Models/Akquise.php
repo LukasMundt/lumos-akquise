@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
+use Lukasmundt\LaravelOwnership\Contracts\CanHaveOwner;
+use Lukasmundt\LaravelOwnership\Traits\HasMorphOwner;
 use Lukasmundt\ProjectCI\Models\Gruppe;
 use Lukasmundt\ProjectCI\Models\Kampagne;
 use Lukasmundt\ProjectCI\Models\Notiz;
 
 // use Lukasmundt\ProjectCI\Models\Projekt as P;
 
-class Akquise extends Model
+class Akquise extends Model implements CanHaveOwner
 {
-    use HasUlids;
+    use HasUlids, HasMorphOwner;
 
     protected $table = "akquise_akquise";
     protected $primaryKey = "id";
@@ -43,12 +43,12 @@ class Akquise extends Model
 
     public function projekt(): BelongsTo
     {
-        return $this->belongsTo(Projekt::class);
+        return $this->belongsTo(Projekt::class, 'id', 'id');
     }
 
     public function gruppen(): MorphToMany
     {
-        return $this->morphToMany(Gruppe::class, 'gruppeverknuepfung', 'projectci_gruppeverknuepfung')->withPivot('typ','prioritaet');
+        return $this->morphToMany(Gruppe::class, 'gruppeverknuepfung', 'projectci_gruppeverknuepfung')->withPivot('typ', 'prioritaet');
     }
 
     public function notizen(): MorphMany
@@ -59,5 +59,10 @@ class Akquise extends Model
     public function kampagnen(): MorphToMany
     {
         return $this->morphToMany(Kampagne::class, 'bewerbbar');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'id';
     }
 }

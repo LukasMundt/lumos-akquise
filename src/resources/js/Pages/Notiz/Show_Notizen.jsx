@@ -3,7 +3,7 @@ import Notiz from "./partials/Notiz";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Card from "@/Components/Card";
 
-export default function Show_Notizen({ notizen, button}) {
+export default function Show_Notizen({ notizen, button, domain, projekt}) {
   return (
     <section className="mt-12 space-y-4">
       <div className="flex justify-center">
@@ -28,7 +28,7 @@ export default function Show_Notizen({ notizen, button}) {
           ""
         )}
         {notizen.map((notiz) => (
-          <Notiz notiz={notiz} key={notiz.id} />
+          <Notiz notiz={notiz} key={notiz.id} projekt={projekt} domain={domain}/>
         ))}
       </Card>
     </section>

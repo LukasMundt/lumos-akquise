@@ -5,6 +5,7 @@ namespace Lukasmundt\Akquise\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,18 +18,19 @@ use Lukasmundt\Akquise\Models\Akquise;
 use Lukasmundt\Akquise\Http\Requests\FirstCreateAkquiseRequest;
 use Lukasmundt\Akquise\Models\Projekt;
 use Lukasmundt\Akquise\Services\CoordinatesService;
-use Lukasmundt\ProjectCI\Models\Notiz;
 
 class AkquiseController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Akquise::class, 'akquise');
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(Akquise::class, 'akquise');
+    // }
 
     public function index(Request $request)
     {
-        (int) $page = !empty($request->page) ? (int) $request->page : 1;
+        $this->authorize('viewAny', Akquise::class);
+
+        // (int) $page = !empty($request->page) ? (int) $request->page : 1;
         (String) $search = $request->search;
         (string) $filter = $request->filter;
 
@@ -42,10 +44,10 @@ class AkquiseController extends Controller
         }
 
         $projekte = Projekt::where(function (Builder $query) use ($filterVals) {
-            $query->whereIn('strasse', $filterVals['strasse'] ?? [], 'and', !isset($filterVals['strasse']) || count($filterVals['strasse']) == 0)
-                ->whereIn('hausnummer', $filterVals['hausnummer'] ?? [], 'and', !isset($filterVals['hausnummer']) || count($filterVals['hausnummer']) == 0)
-                ->whereIn('stadtteil', $filterVals['stadtteil'] ?? [], 'and', !isset($filterVals['stadtteil']) || count($filterVals['stadtteil']) == 0)
-                ->whereIn('plz', $filterVals['plz'] ?? [], 'and', !isset($filterVals['plz']) || count($filterVals['plz']) == 0);
+            $query->whereIn('strasse', $filterVals['strasse'] ?? [], 'and', !isset ($filterVals['strasse']) || count($filterVals['strasse']) == 0)
+                ->whereIn('hausnummer', $filterVals['hausnummer'] ?? [], 'and', !isset ($filterVals['hausnummer']) || count($filterVals['hausnummer']) == 0)
+                ->whereIn('stadtteil', $filterVals['stadtteil'] ?? [], 'and', !isset ($filterVals['stadtteil']) || count($filterVals['stadtteil']) == 0)
+                ->whereIn('plz', $filterVals['plz'] ?? [], 'and', !isset ($filterVals['plz']) || count($filterVals['plz']) == 0);
         })->where(function (Builder $query) use ($search) {
             $query->where('strasse', 'LIKE', '%' . $search . '%')
                 ->orWhere('hausnummer', 'LIKE', '%' . $search . '%')
@@ -90,9 +92,9 @@ class AkquiseController extends Controller
 
     public function map(Request $request)
     {
-        $this->authorize('index');
+        $this->authorize('viewAny', Akquise::class);
 
-        $projekte = $this->getClause($request->search)->select('projectci_projekt.coordinates_lat', 'projectci_projekt.coordinates_lon', 'projectci_projekt.strasse', 'projectci_projekt.hausnummer', 'akquise_akquise.projekt_id', 'akquise_akquise.retour', 'akquise_akquise.nicht_gewuenscht')->get();
+        $projekte = $this->getClause($request->search)->select('projectci_projekt.coordinates_lat', 'projectci_projekt.coordinates_lon', 'projectci_projekt.strasse', 'projectci_projekt.hausnummer', 'akquise_akquise.id', 'akquise_akquise.retour', 'akquise_akquise.nicht_gewuenscht')->get();
 
         $normalMarkers = [];
         $retourMarkers = [];
@@ -104,21 +106,21 @@ class AkquiseController extends Controller
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
-                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->id, 'domain' => session()->get('team')])
                 ];
             } else if ($projekt->nicht_gewuenscht) {
                 $nichtGewuenschtMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
-                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->id, 'domain' => session()->get('team')])
                 ];
             } else {
                 $normalMarkers[] = [
                     'lat' => $projekt->coordinates_lat,
                     'lon' => $projekt->coordinates_lon,
                     'label' => $projekt->strasse . ' ' . $projekt->hausnummer,
-                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->projekt_id])
+                    'url' => route('akquise.akquise.show', ['projekt' => $projekt->id, 'domain' => session()->get('team')])
                 ];
             }
         }
@@ -157,7 +159,7 @@ class AkquiseController extends Controller
             ->orWhere('akquise_akquise.status', 'LIKE', '%' . $search . '%')
             // other
 
-            ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.projekt_id', 'inner');
+            ->join('akquise_akquise', 'projectci_projekt.id', '=', 'akquise_akquise.id', 'inner');
         //->join('projectci_gruppeverknuepfung', 'akquise_akquise.id', '=', 'projectci_gruppeverknuepfung.gruppeverknuepfung_id')
         // ->orderBy('projectci_projekt.strasse')
         // ->orderBy('projectci_projekt.hausnummer_nummer');
@@ -165,14 +167,14 @@ class AkquiseController extends Controller
 
     public function firstCreate(Request $request): Response
     {
-        $this->authorize('create');
+        $this->authorize('create', Akquise::class);
 
         return Inertia::render('lukasmundt/akquise::Akquise/FirstCreate');
     }
 
-    public function secondCreate(FirstCreateAkquiseRequest $request)
+    public function secondCreate(FirstCreateAkquiseRequest $request, $domain)
     {
-        $this->authorize('create');
+        $this->authorize('create', Akquise::class);
 
         $response = CoordinatesService::getNominatimResponse($request->validated('strasse'));
 
@@ -180,15 +182,15 @@ class AkquiseController extends Controller
             return redirect(
                 route(
                     'akquise.akquise.create3',
-                    ['key' => $response['lat'] . '_' . $response['lon']]
+                    ['key' => $response['lat'] . '_' . $response['lon'], 'domain' => $domain]
                 )
             );
         }
     }
 
-    public function thirdCreate(Request $request, string $key = null): Response
+    public function thirdCreate(Request $request, $domain, string $key = null): Response
     {
-        $this->authorize('create');
+        $this->authorize('create', Akquise::class);
 
         if (empty($key) || !Cache::has($key)) {
             return Inertia::render('lukasmundt/akquise::Akquise/Create', [
@@ -200,7 +202,8 @@ class AkquiseController extends Controller
                     'stadtteil' => '',
                     'lat' => '',
                     'lon' => '',
-                ]
+                ],
+                'cacheKey' => $key
             ]);
         }
         return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => Cache::get($key), 'cacheKey' => $key]);
@@ -208,7 +211,7 @@ class AkquiseController extends Controller
 
     public function store(StoreAkquiseRequest $request, string $key = null): RedirectResponse
     {
-        $this->authorize('create');
+        $this->authorize('create', Akquise::class);
 
         if (!empty($key)) {
             Cache::forget($key);
@@ -220,13 +223,19 @@ class AkquiseController extends Controller
         $akquise = new Akquise($request->validated());
         $akquise->projekt()->associate($projekt);
         $akquise->save();
+        $projekt->owner()->attach(Auth::user());
+        $akquise->owner()->attach(Auth::user());
+        // Auth::user()->owns()->attach($projekt);
 
-        return redirect(route('akquise.akquise.show', ['projekt' => $projekt]));
+        return redirect(route('akquise.akquise.show', ['projekt' => $projekt->akquise->id, 'domain' => session()->get('team')]));
     }
 
-    public function show(Request $request, Projekt $projekt): Response
+    public function show(string $domain, Akquise $projekt): Response
     {
-        $this->authorize('create', $projekt);
+        $akquise = $projekt;
+        $this->authorize('view', $akquise);
+        $projekt = $projekt->projekt;
+
 
         return Inertia::render('lukasmundt/akquise::Akquise/Show', [
             'projekt' => $projekt->load(['akquise', 'akquise.gruppen.personen.telefonnummern', 'akquise.notizen']),
@@ -246,7 +255,7 @@ class AkquiseController extends Controller
     public function update(UpdateAkquiseRequest $request, Projekt $projekt): RedirectResponse
     {
         $this->authorize('update', $projekt);
-        
+
         $projekt->load('akquise');
         $projekt->akquise->update($request->validated());
 

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('akquise_akquise', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->foreignUlid('projekt_id')
+            // $table->ulid('id')->primary();
+            $table->foreignUlid('id')
                 ->constrained('projectci_projekt', 'id')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

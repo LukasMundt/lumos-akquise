@@ -18,7 +18,7 @@ import Show_Personen from "./partials/Show_Personen";
 
 export default class Show extends React.Component {
   render() {
-    const { auth, projekt, notiz } = this.props;
+    const { auth, projekt, notiz, domain} = this.props;
     console.log(this.props);
     return (
       <AuthenticatedLayout
@@ -103,6 +103,7 @@ export default class Show extends React.Component {
                 <Show_Personen
                   gruppen={projekt.akquise.gruppen}
                   projektId={projekt.id}
+                  domain={domain}
                 />
                 <Show_Notizen
                   notizen={projekt.akquise.notizen}
@@ -113,9 +114,12 @@ export default class Show extends React.Component {
                         related_id={projekt.akquise.id}
                         defaultValue={notiz != null ? notiz.inhalt : null}
                         id={notiz != null ? notiz.id : null}
+                        domain={domain}
                       />
                     </Drawer>
                   }
+                  projekt={projekt}
+                  domain={domain}
                 />
               </div>
               <div className="space-y-4">

@@ -13,19 +13,6 @@ export default function Index({}) {
   const { user, auth, projekte, domain } = usePage().props;
   console.log(projekte.length);
 
-  const { data, setData, post, errors, processing, recentlySuccessful } =
-    useForm({
-      strasse: "",
-      hausnummer: "",
-    });
-
-  const submit = (e) => {
-    e.preventDefault();
-    console.log(data);
-
-    post(route("akquise.akquise.create2", { domain: domain }));
-  };
-
   console.log(usePage().props);
 
   return (
@@ -137,7 +124,7 @@ export default function Index({}) {
                         <Table.Cell>
                           <Link
                             href={route("akquise.akquise.show", {
-                              projekt: projekt.id,
+                              projekt: projekt.id, domain: domain
                             })}
                           >
                             {projekt.strasse}

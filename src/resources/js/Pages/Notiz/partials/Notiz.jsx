@@ -14,9 +14,8 @@ import { Link, usePage } from "@inertiajs/react";
 import { Button } from "flowbite-react";
 import { createReactEditorJS } from "react-editor-js/dist/react-editor-js.cjs";
 
-export default function Notiz({ notiz, className, link = null }) {
+export default function Notiz({ notiz, className, link = null, domain, projekt}) {
   const ReactEditorJS = createReactEditorJS();
-  const { projekt } = usePage().props;
 
   const data = notiz.inhalt;
   const defaultValue = JSON.parse(data);
@@ -32,6 +31,7 @@ export default function Notiz({ notiz, className, link = null }) {
               href={route("akquise.akquise.showMitNotiz", {
                 projekt: projekt.id,
                 notiz: notiz.id,
+                domain: domain
               })}
               title="Notiz bearbeiten"
             >

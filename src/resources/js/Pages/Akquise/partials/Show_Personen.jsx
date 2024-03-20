@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "flowbite-react";
 
-export default function Show_Personen({ gruppen = [], projektId }) {
+export default function Show_Personen({ gruppen = [], projektId, domain}) {
   return (
     <section className="mt-12 space-y-4">
       <div className="flex justify-center">
@@ -21,6 +21,7 @@ export default function Show_Personen({ gruppen = [], projektId }) {
         <PrimaryLinkButton
           href={route("akquise.akquise.personen.associate", {
             projekt: projektId,
+            domain: domain
           })}
         >
           <LinkIcon className="w-4 mr-3" /> Person verknüpfen
@@ -78,6 +79,7 @@ export default function Show_Personen({ gruppen = [], projektId }) {
                       color="gray"
                       href={route("projectci.person.show", {
                         person: person.id,
+                        domain: domain
                       })}
                     >
                       <ArrowTopRightOnSquareIcon className="w-5" />

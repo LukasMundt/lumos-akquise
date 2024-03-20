@@ -11,12 +11,12 @@ import { Button } from "flowbite-react";
 import InputError from "@/Components/Inputs/InputError";
 
 export default function Form({
-  status,
   className = "",
   related_type,
   related_id,
   id = null,
   defaultValue = "",
+  domain
 }) {
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
@@ -49,11 +49,11 @@ export default function Form({
 
     console.log(tempData);
 
-    post(route("projectci.notiz.save"));
+    post(route("projectci.notiz.save", {domain: domain}));
   };
 
   return (
-    <section className={className}>
+    <section className={className+" z-[100]"} >
       <form onSubmit={submit} className="mt-6 space-y-6">
         <div className="flex justify-end gap-4 pt-4">
         <Transition

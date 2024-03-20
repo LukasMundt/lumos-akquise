@@ -11,7 +11,7 @@ import MyMap from "./MyMap";
 import Card from "@/Components/Card";
 
 export default function CreateForm({ status, className = "" }) {
-  const { response, key } = usePage().props;
+  const { response, key, domain } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
@@ -33,7 +33,7 @@ export default function CreateForm({ status, className = "" }) {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.store", { key: key }));
+    post(route("akquise.akquise.store", { key: key, domain: domain }));
   };
 
   return (
@@ -110,6 +110,21 @@ export default function CreateForm({ status, className = "" }) {
               />
 
               <InputError className="mt-2" message={errors.stadtteil} />
+            </div>
+            {/* Stadt */}
+            <div>
+              <InputLabel htmlFor="stadt" value="Stadt" />
+
+              <TextInput
+                className="w-full"
+                id="stadt"
+                value={data.stadt}
+                onChange={(e) => {
+                  setData("stadt", e.target.value);
+                }}
+              />
+
+              <InputError className="mt-2" message={errors.stadt} />
             </div>
           </div>
         </Card>

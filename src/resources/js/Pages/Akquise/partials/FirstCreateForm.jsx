@@ -6,7 +6,7 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
 export default function FirstCreateForm({ status, className = "" }) {
-  const { user } = usePage().props;
+  const { user, domain } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
@@ -18,7 +18,7 @@ export default function FirstCreateForm({ status, className = "" }) {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.create2"));
+    post(route("akquise.akquise.create2", {domain: domain}));
   };
 
   return (

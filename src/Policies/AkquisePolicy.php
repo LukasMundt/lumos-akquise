@@ -4,38 +4,36 @@ namespace Lukasmundt\Akquise\Policies;
 
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Lukasmundt\Akquise\Models\Akquise;
+use Lukasmundt\Akquise\Models\Projekt;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AkquisePolicy
 {
-    /**
-     * Create a new policy instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /**
      * Perform pre-authorization checks.
      */
     public function before(User $user, string $ability): bool|null
     {
-        if (Team::where('id', session()->get("team"))->first()->permissions()->where('name', 'lumos-akquise-basic')->count() < 1) {
+        if (Team::where('id', session()->get("team"))->first()->permissions()->where('name', 'tp-lumos-akquise-basic')->count() < 1) {
             return false;
         }
 
+        setPermissionsTeamId(session()->get("team"));
+        $user->unsetRelation('roles');
+        $user->unsetRelation('permissions');
         return null;
     }
 
     public function viewAny(User $user): bool
     {
-        setPermissionsTeamId(0);
-        $user->unsetRelation('roles');
-        $user->unsetRelation('permissions');
 
-        return $user->hasAnyPermission(['lumos-akquise-view-own-projects', 
-        'lumos-akquise-view-all-projects']);
+        return $user->hasAnyPermission([
+            'lumos-akquise-view-own-projects',
+            'lumos-akquise-view-all-projects'
+        ]);
     }
 
     /**
@@ -43,18 +41,12 @@ class AkquisePolicy
      */
     public function view(User $user, Akquise $akquise): bool
     {
-        setPermissionsTeamId(0);
-        $user->unsetRelation('roles');
-        $user->unsetRelation('permissions');
-
-        if($user->hasAnyPermission(['lumos-akquise-view-all-projects']))
-        {
+        if ($user->hasAnyPermission(['lumos-akquise-view-all-projects'])) {
             return true;
         }
         // prüfen, ob akquise aktuellem benutzer gehört
-        else if($user->hasAnyPermission(['lumos-akquise-view-own-projects']))
-        {
-            return false;
+        else if ($user->hasAnyPermission(['lumos-akquise-view-own-projects'])) {
+            return true;
         }
 
         return false;
@@ -65,7 +57,7 @@ class AkquisePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasAnyPermission('lumos-akquise-create-project');
     }
 
     /**
@@ -73,6 +65,14 @@ class AkquisePolicy
      */
     public function update(User $user, Team $team): bool
     {
+        if($user->hasAnyPermission('lumos-akquise-edit-all-projects'))
+        {
+            return true;
+        }
+        else if($user->hasAnyPermission('lumos-akquise-edit-own-projects'))
+        {
+            return true;
+        }
         return false;
     }
 
@@ -81,6 +81,14 @@ class AkquisePolicy
      */
     public function delete(User $user, Team $team): bool
     {
+        if($user->hasAnyPermission('lumos-akquise-delete-all-projects'))
+        {
+            return true;
+        }
+        else if($user->hasAnyPermission('lumos-akquise-delete-own-projects'))
+        {
+            return true;
+        }
         return false;
     }
 
