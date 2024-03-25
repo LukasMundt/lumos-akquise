@@ -14,6 +14,9 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("/{domain}/akquise")->gro
     Route::get('/tools/fixbauantrag2link', [ToolController::class, 'fixBauantrag2LinkView'])->name('akquise.tools.fixBauantrag2LinkView');
     Route::post('/tools/fixbauantrag2link', [ToolController::class, 'fixBauantrag2Link'])->name('akquise.tools.fixBauantrag2Link');
 
+    Route::get('/creatables/list', [AkquiseController::class, 'listCreatables'])->name('akquise.akquise.listcreatables');
+    Route::get('/creatables/details', [AkquiseController::class, 'detailsByCoordinates'])->name('akquise.akquise.detailsOfCreatable');
+
     Route::middleware([])->prefix("projects")->group(function () {
         // Karte
         Route::get('/map',[AkquiseController::class, 'map'])->name('akquise.akquise.map');
@@ -24,10 +27,7 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("/{domain}/akquise")->gro
         
         
         Route::get('', [AkquiseController::class, 'index'])->name('akquise.akquise.index');
-        Route::get('/create/1', [AkquiseController::class, 'firstCreate'])->name('akquise.akquise.create.1');
-        Route::post('/create/2', [AkquiseController::class, 'secondCreate'])->name('akquise.akquise.create2');
-        Route::get('/create/3', [AkquiseController::class, 'thirdCreate'])->name('akquise.akquise.create3');
-        Route::get('/create/3/{key}', [AkquiseController::class, 'thirdCreate'])->name('akquise.akquise.create3');
+        Route::get('/create', [AkquiseController::class, 'create'])->name('akquise.akquise.create');
         Route::post('', [AkquiseController::class, 'store'])->name('akquise.akquise.store');
         Route::get('/{projekt}/edit', [AkquiseController::class, 'edit'])->name('akquise.akquise.edit');
         

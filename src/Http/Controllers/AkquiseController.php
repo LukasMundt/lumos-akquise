@@ -5,10 +5,12 @@ namespace Lukasmundt\Akquise\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -165,55 +167,41 @@ class AkquiseController extends Controller
         // ->orderBy('projectci_projekt.hausnummer_nummer');
     }
 
-    public function firstCreate(Request $request): Response
+    public function create(Request $request): Response
     {
         $this->authorize('create', Akquise::class);
 
-        return Inertia::render('lukasmundt/akquise::Akquise/FirstCreate');
+        return Inertia::render('lukasmundt/akquise::Akquise/CreateComplete');
     }
 
-    public function secondCreate(FirstCreateAkquiseRequest $request, $domain)
+    public function listCreatables(FirstCreateAkquiseRequest $request, $domain)
     {
         $this->authorize('create', Akquise::class);
 
-        $response = CoordinatesService::getNominatimResponse($request->validated('strasse'));
+        $results = CoordinatesService::getNominatimShortResponse($request->validated('strasse'));
 
-        if (Cache::put($response['lat'] . '_' . $response['lon'], $response, now()->addDays(2))) {
-            return redirect(
-                route(
-                    'akquise.akquise.create3',
-                    ['key' => $response['lat'] . '_' . $response['lon'], 'domain' => $domain]
-                )
-            );
-        }
+        // foreach ($results as $i => $result) {
+        //     if (Cache::put($result['lat'] . '_' . $result['lon'], $result, now()->addDays(2))) {
+        //         $result['key'] = $result['lat'] . '_' . $result['lon'];
+        //         $result['display_names'] = array_reverse(Str::of($result['display_name'])->explode(", ")->toArray());
+        //         $results[$i] = $result;
+        //     }
+        // }
+
+        return $results;
     }
 
-    public function thirdCreate(Request $request, $domain, string $key = null): Response
+    public function detailsByCoordinates(Request $request)
     {
-        $this->authorize('create', Akquise::class);
-
-        if (empty($key) || !Cache::has($key)) {
-            return Inertia::render('lukasmundt/akquise::Akquise/Create', [
-                'response' => [
-                    'hausnummer' => '',
-                    'strasse' => '',
-                    'plz' => '',
-                    'stadt' => '',
-                    'stadtteil' => '',
-                    'lat' => '',
-                    'lon' => '',
-                ],
-                'cacheKey' => $key
-            ]);
-        }
-        return Inertia::render('lukasmundt/akquise::Akquise/Create', ['response' => Cache::get($key), 'cacheKey' => $key]);
+        $validated = $request->validate(['lat' => 'required', 'lon' => 'required']);
+        return CoordinatesService::detailsByCoordinates($validated['lat'], $validated['lon']);
     }
 
     public function store(StoreAkquiseRequest $request, string $key = null): RedirectResponse
     {
         $this->authorize('create', Akquise::class);
 
-        if (!empty($key)) {
+        if (!empty ($key)) {
             Cache::forget($key);
         }
 

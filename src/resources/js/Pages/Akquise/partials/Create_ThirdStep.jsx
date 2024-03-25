@@ -2,51 +2,69 @@ import InputError from "@/Components/Inputs/InputError";
 import InputLabel from "@/Components/Inputs/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/Inputs/TextInput";
-import { useForm, usePage } from "@inertiajs/react";
+import { useForm, usePage, useRemember } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import { Label, Select } from "flowbite-react";
 
 import Checkbox from "@/Components/Inputs/Checkbox";
 import MyMap from "./MyMap";
 import Card from "@/Components/Card";
+import React from "react";
 
-export default function CreateForm({ status, className = "" }) {
-  const { response, key, domain } = usePage().props;
+export default function ThirdStep({ className = "", rawData }) {
+  // const [rawData, setRawData] = useRemember([], "rawCreatableData");
+  const { domain } = usePage().props;
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      strasse: response.strasse,
-      hausnummer: response.hausnummer,
-      plz: response.plz,
-      stadt: response.stadt,
-      stadtteil: response.stadtteil,
+      strasse: rawData.strasse??"",
+      hausnummer: rawData.hausnummer??"",
+      plz: rawData.plz,
+      stadt: rawData.stadt,
+      stadtteil: rawData.stadtteil,
       teilung: true,
       abriss: true,
       nicht_gewuenscht: false,
       retour: false,
       status: "erfasst",
-      coordinates_lat: response.lat,
-      coordinates_lon: response.lon,
+      coordinates_lat: rawData.lat ?? null,
+      coordinates_lon: rawData.lon ?? null,
     });
+
+  React.useEffect(() => {
+    // setData({
+    //   hausnummer: rawData.hausnummer,
+    //   plz: rawData.plz,
+    //   coordinates_lat: rawData.lat,
+    //   coordinates_lon: rawData.lon,
+    //   stadt: rawData.stadt,
+    //   stadtteil: rawData.stadtteil,
+    //   strasse: rawData.strasse,
+    // });
+    // console.log("key changed: " + keyCr);
+  }, [rawData]);
+
+  console.log(data);
 
   const submit = (e) => {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.store", { key: key, domain: domain }));
+    post(route("akquise.akquise.store", { domain: domain }));
   };
 
   return (
     <section className={className}>
       <form onSubmit={submit} className="mt-6 space-y-6">
-        {response.lat === "" || response.lat === "" ? (
-          ""
+        {rawData.lat != "" &&
+        rawData.lon != "" &&
+        rawData.lat != undefined &&
+        rawData.lon != undefined &&
+        data.coordinates_lat != null &&
+        data.coordinates_lon != null ? (
+          <MyMap lat={rawData.lat} lon={rawData.lon} scrollWheelZoom={false} />
         ) : (
-          <MyMap
-            lat={response.lat}
-            lon={response.lon}
-            scrollWheelZoom={false}
-          />
+          ""
         )}
 
         <Card>
@@ -60,7 +78,13 @@ export default function CreateForm({ status, className = "" }) {
                 id="strasse"
                 value={data.strasse}
                 onChange={(e) => {
-                  setData("strasse", e.target.value);
+                  // setData({ coordinates_lat: null, coordinates_lon: null });
+                  setData({
+                    ...data,
+                    strasse: e.target.value,
+                    coordinates_lat: null,
+                    coordinates_lon: null,
+                  });
                 }}
               />
 
@@ -75,7 +99,13 @@ export default function CreateForm({ status, className = "" }) {
                 id="hausnummer"
                 value={data.hausnummer}
                 onChange={(e) => {
-                  setData("hausnummer", e.target.value);
+                  // setData({ coordinates_lat: null, coordinates_lon: null });
+                  setData({
+                    ...data,
+                    hausnummer: e.target.value,
+                    coordinates_lat: null,
+                    coordinates_lon: null,
+                  });
                 }}
               />
 
@@ -90,7 +120,13 @@ export default function CreateForm({ status, className = "" }) {
                 id="plz"
                 value={data.plz}
                 onChange={(e) => {
-                  setData("plz", e.target.value);
+                  // setData({ coordinates_lat: null, coordinates_lon: null });
+                  setData({
+                    ...data,
+                    plz: e.target.value,
+                    coordinates_lat: null,
+                    coordinates_lon: null,
+                  });
                 }}
               />
 
@@ -120,7 +156,12 @@ export default function CreateForm({ status, className = "" }) {
                 id="stadt"
                 value={data.stadt}
                 onChange={(e) => {
-                  setData("stadt", e.target.value);
+                  setData({
+                    ...data,
+                    stadt: e.target.value,
+                    coordinates_lat: null,
+                    coordinates_lon: null,
+                  });
                 }}
               />
 
@@ -219,7 +260,7 @@ export default function CreateForm({ status, className = "" }) {
         </Card>
 
         <div className="flex items-center gap-4">
-          <PrimaryButton disabled={processing}>Save</PrimaryButton>
+          <PrimaryButton disabled={processing}>Speichern</PrimaryButton>
 
           <Transition
             show={recentlySuccessful}
@@ -227,7 +268,9 @@ export default function CreateForm({ status, className = "" }) {
             leaveTo="opacity-0"
             className="transition ease-in-out"
           >
-            <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Gespeichert.
+            </p>
           </Transition>
         </div>
       </form>

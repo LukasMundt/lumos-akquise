@@ -5,24 +5,24 @@ import TextInput from "@/Components/Inputs/TextInput";
 import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
-export default function FirstCreateForm({ status, className = "" }) {
-  const { user, domain } = usePage().props;
+export default function FirstStep({ className = "", setInput, domain, streetAndNumber = "", step}) {
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      strasse: "",
+      strasse: streetAndNumber,
       hausnummer: "",
     });
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     console.log(data);
 
-    post(route("akquise.akquise.create2", {domain: domain}));
+    setInput(data.strasse);
+    // post(route("akquise.akquise.create2", { domain: domain }));
   };
 
   return (
-    <section className={className}>
+    <section className={className} id="firstSection">
       <form onSubmit={submit} className="mt-6 space-y-6">
         <div className="grid grid-cols-1">
           {/* Straße */}
