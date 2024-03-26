@@ -1,14 +1,12 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router, usePage, useRemember } from "@inertiajs/react";
-import CreateForm from "./partials/Create_ThirdStep";
+import { Head, usePage, useRemember } from "@inertiajs/react";
 import { useState } from "react";
 import FirstStep from "./partials/Create_FirstStep";
 import axios from "axios";
 import SecondStep from "./partials/Create_SecondStep";
 import ThirdStep from "./partials/Create_ThirdStep";
 import { useEffect } from "react";
-import { CircleStackIcon } from "@heroicons/react/24/outline";
 
 export default function CreateComplete({}) {
   const { auth, domain } = usePage().props;
@@ -22,18 +20,37 @@ export default function CreateComplete({}) {
   const [key, setKeyState] = useRemember(0, "key");
   const [rawData, setRawData] = useRemember([], "rawData");
   const [rawDataLoaded, setRawDataLoaded] = useRemember(false, "rawDataLoaded");
+  const [errorsFirst, setErrorsFirst] = useState([]);
 
   const setFromFirstToSecond = async (streetAndNumber) => {
     setStepState(2);
     setStreetAndNumber(streetAndNumber);
-    const res = await axios.get(
-      route("akquise.akquise.listcreatables", {
-        strasse: streetAndNumber,
-        domain: domain,
+    axios
+      .get(
+        route("akquise.akquise.listcreatables", {
+          strasse: streetAndNumber,
+          domain: domain,
+        })
+      )
+      .then((response) => {
+        setCreatables(response.data);
+        setErrorsFirst([]);
+        setRawDataLoaded(true);
       })
-    );
-    setCreatables(res.data);
-    setRawDataLoaded(true);
+      .catch((error) => {
+        setCreatables([]);
+        setErrorsFirst(error.response.data.errors);
+      });
+    // .then((response) => {
+    //   updateResult(response.data);
+    //   updateErrors([]);
+    // })
+    // .catch((error) => {
+    //   updateErrors(error.response.data.errors);
+    //   updateResult(false);
+    // });
+    // setCreatables(res.data);
+    // setRawDataLoaded(true);
 
     // router.get("", { step: step }, { replace: true, preserveState: true });
   };
@@ -92,6 +109,7 @@ export default function CreateComplete({}) {
             <FirstStep
               setInput={setFromFirstToSecond}
               streetAndNumber={streetAndNumber}
+              errors={errorsFirst}
             />
           ) : (
             ""

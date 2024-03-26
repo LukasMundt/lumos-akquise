@@ -5,9 +5,9 @@ import TextInput from "@/Components/Inputs/TextInput";
 import { useForm } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
-export default function FirstStep({ className = "", setInput, streetAndNumber = "", step}) {
+export default function FirstStep({ className = "", setInput, streetAndNumber = "", step, errors}) {
 
-  const { data, setData, errors, processing, recentlySuccessful } =
+  const { data, setData, processing, recentlySuccessful } =
     useForm({
       strasse: streetAndNumber,
       hausnummer: "",
@@ -35,7 +35,7 @@ export default function FirstStep({ className = "", setInput, streetAndNumber = 
               }}
             />
 
-            <InputError className="mt-2" message={errors.strasse} />
+            <InputError className="mt-2" message={errors.strasse??[]} />
           </div>
           {/* Hausnummer */}
           {/* <div>

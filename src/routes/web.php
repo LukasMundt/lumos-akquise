@@ -27,7 +27,7 @@ Route::middleware(['web', 'auth', 'verified'])->prefix("/{domain}/akquise")->gro
         
         
         Route::get('', [AkquiseController::class, 'index'])->name('akquise.akquise.index');
-        Route::get('/create', [AkquiseController::class, 'create'])->name('akquise.akquise.create');
+        Route::get('/create/1', [AkquiseController::class, 'create'])->name('akquise.akquise.create');
         Route::post('', [AkquiseController::class, 'store'])->name('akquise.akquise.store');
         Route::get('/{projekt}/edit', [AkquiseController::class, 'edit'])->name('akquise.akquise.edit');
         
