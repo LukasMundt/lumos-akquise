@@ -5,18 +5,6 @@ import MyMapMulti from "./partials/MyMapMulti";
 export default function IndexMap({}) {
   const { user, auth, markers } = usePage().props;
 
-  const { data, setData, post, errors, processing, recentlySuccessful } =
-    useForm({
-      strasse: "",
-      hausnummer: "",
-    });
-
-  const submit = (e) => {
-    e.preventDefault();
-
-    post(route("akquise.akquise.create2"));
-  };
-
   
   const bodyHeight = document.body.clientHeight;
   const headerHeight =

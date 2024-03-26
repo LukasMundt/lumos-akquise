@@ -34,7 +34,7 @@ export default function Index({}) {
             <div className="lg:col-span-4">
               <div className="flex justify-between col-span-1 lg:col-span-4 mb-4">
                 <PrimaryLinkButton
-                  href={route("akquise.akquise.create.1", { domain: domain })}
+                  href={route("akquise.akquise.create", { domain: domain })}
                 >
                   <PlusIcon className="w-6 me-2" />
                   Projekt erstellen
