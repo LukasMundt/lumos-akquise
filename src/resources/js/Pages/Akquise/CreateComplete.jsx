@@ -41,7 +41,6 @@ export default function CreateComplete({}) {
   useEffect(() => {
     if (creatables.length === 1) {
       setSecondToThird(0);
-      console.log("because creatables had length:" + creatables.length);
     }
   }, [creatables]);
 
@@ -74,8 +73,6 @@ export default function CreateComplete({}) {
 
     // router.get("", { step: step }, { preserveState: true });
   };
-
-  console.log([streetAndNumber, step, creatables]);
 
   return (
     <AuthenticatedLayout

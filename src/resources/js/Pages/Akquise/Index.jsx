@@ -11,9 +11,6 @@ import Index_Filter from "./partials/Index_Filter";
 
 export default function Index({}) {
   const { user, auth, projekte, domain } = usePage().props;
-  console.log(projekte.length);
-
-  console.log(usePage().props);
 
   return (
     <AuthenticatedLayout

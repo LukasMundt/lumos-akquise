@@ -2,7 +2,7 @@ import InputError from "@/Components/Inputs/InputError";
 import InputLabel from "@/Components/Inputs/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/Inputs/TextInput";
-import { useForm, usePage, useRemember } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import { Label, Select } from "flowbite-react";
 
@@ -17,8 +17,8 @@ export default function ThirdStep({ className = "", rawData }) {
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      strasse: rawData.strasse??"",
-      hausnummer: rawData.hausnummer??"",
+      strasse: rawData.strasse ?? "",
+      hausnummer: rawData.hausnummer ?? "",
       plz: rawData.plz,
       stadt: rawData.stadt,
       stadtteil: rawData.stadtteil,
@@ -44,11 +44,8 @@ export default function ThirdStep({ className = "", rawData }) {
     // console.log("key changed: " + keyCr);
   }, [rawData]);
 
-  console.log(data);
-
   const submit = (e) => {
     e.preventDefault();
-    console.log(data);
 
     post(route("akquise.akquise.store", { domain: domain }));
   };

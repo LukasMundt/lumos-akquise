@@ -6,7 +6,7 @@ import EditForm from "./partials/EditForm";
 export default class Edit extends React.Component {
   render() {
     const { auth, projekt } = this.props;
-    console.log(this.props);
+    
     return (
       <AuthenticatedLayout
         user={auth.user}

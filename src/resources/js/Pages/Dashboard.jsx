@@ -12,7 +12,7 @@ import {
 export default class Dashboard extends React.Component {
   render() {
     const { auth, statistics } = this.props;
-    console.log(this.props);
+    
     return (
       <AuthenticatedLayout
         user={auth.user}

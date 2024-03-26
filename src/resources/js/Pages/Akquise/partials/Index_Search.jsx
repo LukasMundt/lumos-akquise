@@ -5,7 +5,6 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 export default function Index_Search({ className = "" }) {
   // Lädt den Wert aus den properties der Page in die Variable search
   const { search, filter } = usePage().props;
-  console.log(filter);
 
   // lädt die parameter der aktuellen Seite in ein Array
   let paramsRaw = new URLSearchParams(window.location.search)

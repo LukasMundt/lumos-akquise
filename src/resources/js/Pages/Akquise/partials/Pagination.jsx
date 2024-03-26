@@ -4,7 +4,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import { Link, router, usePage } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { Button, Select } from "flowbite-react";
 import ButtonGroup from "flowbite-react/lib/esm/components/Button/ButtonGroup";
 import React from "react";
@@ -12,7 +12,6 @@ import { useForm } from "@inertiajs/react";
 
 export default function Pagination({ pagination }) {
   const { get } = useForm();
-  console.log(pagination);
 
   // lädt die parameter der aktuellen Seite in ein Array
   let paramsRaw = new URLSearchParams(window.location.search)

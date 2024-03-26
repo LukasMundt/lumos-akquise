@@ -13,12 +13,11 @@ export default function IndexMap({}) {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(data);
 
     post(route("akquise.akquise.create2"));
   };
 
-  console.log(usePage().props);
+  
   const bodyHeight = document.body.clientHeight;
   const headerHeight =
     document.getElementsByTagName("header").length > 0
@@ -32,7 +31,7 @@ export default function IndexMap({}) {
     document.getElementsByName("mapContainer").length > 0
       ? document.getElementById("mapContainer").item(0).clientHeight
       : 450;
-  console.log(bodyHeight * 0.5);
+  
   return (
     <AuthenticatedLayout
       user={auth.user}

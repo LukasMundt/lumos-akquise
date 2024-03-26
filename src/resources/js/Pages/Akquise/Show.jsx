@@ -19,7 +19,6 @@ import Show_Personen from "./partials/Show_Personen";
 export default class Show extends React.Component {
   render() {
     const { auth, projekt, notiz, domain} = this.props;
-    console.log(this.props);
     return (
       <AuthenticatedLayout
         user={auth.user}

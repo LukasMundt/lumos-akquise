@@ -72,7 +72,7 @@ export default class Show_KartenModal extends React.Component {
               </Tabs.Item>
 
               <Tabs.Item title="Flurstücke">
-                <div onLoad={(e) => console.log(e)}>
+                <div>
                   <div className="w-full grid">
                     <iframe
                       width={600}
@@ -89,7 +89,7 @@ export default class Show_KartenModal extends React.Component {
                 </div>
               </Tabs.Item>
               <Tabs.Item title="Lärmkarte">
-                <div onLoad={(e) => console.log(e)}>
+                <div>
                   <div className="w-full grid">
                     <iframe
                       width={600}

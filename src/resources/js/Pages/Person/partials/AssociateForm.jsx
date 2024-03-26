@@ -17,7 +17,6 @@ export default function AssociateForm({ status, className = "", domain}) {
 
   const submit = (e) => {
     e.preventDefault();
-    console.log(data);
 
     post(
       route("akquise.akquise.personen.storeAssociation", { projekt: projekt, domain: domain})

@@ -1,5 +1,4 @@
 import Card from "@/Components/Card";
-import PrimaryButton from "@/Components/PrimaryButton";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 import {
   ArrowTopRightOnSquareIcon,
@@ -36,7 +35,6 @@ export default function Show_Personen({ gruppen = [], projektId, domain}) {
         )}
         {gruppen.map((gruppe, indexG) => {
           return gruppe.personen.map((person, indexP) => {
-            console.log(person);
             return (
               <>
                 <div className="flex space-x-3 justify-between" key={person.id}>

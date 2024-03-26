@@ -1,11 +1,5 @@
-import InputError from "@/Components/Inputs/InputError";
-import InputLabel from "@/Components/Inputs/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/Inputs/TextInput";
-import { Link, useForm, usePage, useRemember } from "@inertiajs/react";
-import { Transition } from "@headlessui/react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { Link, useRemember } from "@inertiajs/react";
 import { Spinner } from "flowbite-react";
 import Card from "@/Components/Card";
 import LoadableMap from "./LoadableMap";

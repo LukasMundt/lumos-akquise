@@ -19,10 +19,8 @@ export default function FixBauantrag2Link({
   const { data, setData, processing, recentlySuccessful } = useForm({
     rawLink: "",
   });
-  console.log(usePage().props);
   const submit = (e) => {
     e.preventDefault();
-    console.log(data);
 
     axios
       .post(

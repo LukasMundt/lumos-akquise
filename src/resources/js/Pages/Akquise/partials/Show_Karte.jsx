@@ -1,10 +1,8 @@
 import { usePage } from "@inertiajs/react";
 import { Alert } from "flowbite-react";
 
-import Checkbox from "@/Components/Inputs/Checkbox";
 import MyMap from "./MyMap";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import MyMapMulti from "./MyMapMulti";
 
 export default function Show_Karte({ status, className = "" }) {
   const { projekt } = usePage().props;

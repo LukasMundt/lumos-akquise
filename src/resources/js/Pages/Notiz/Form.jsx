@@ -25,7 +25,6 @@ export default function Form({
       related_type: related_type ?? "",
       related_id: related_id ?? "",
     });
-  console.log(data.notiz);
   const editorCore = React.useRef(null);
 
   const handleInitialize = React.useCallback((instance) => {
@@ -46,8 +45,6 @@ export default function Form({
     e.preventDefault();
     let tempData = data;
     tempData.notiz = await handleSave();
-
-    console.log(tempData);
 
     post(route("projectci.notiz.save", {domain: domain}));
   };

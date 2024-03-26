@@ -9,8 +9,6 @@ import React from "react";
 import { useForm } from "@inertiajs/react";
 
 export default function SimplePagination({ pagination }) {
-  const { get } = useForm();
-  console.log(pagination);
 
   // lädt die parameter der aktuellen Seite in ein Array
   let paramsRaw = new URLSearchParams(window.location.search)
